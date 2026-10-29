@@ -1,0 +1,630 @@
+\documentclass[a4paper,10pt]{ltjsarticle}
+\usepackage[margin=22mm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{adjustbox}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,patterns,calc,decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\lstset{language=Python, basicstyle=\ttfamily\scriptsize, keywordstyle=\bfseries,
+  commentstyle=\itshape\color{black!70}, stringstyle=\ttfamily, columns=fullflexible, keepspaces=true,
+  frame=tb, framerule=0.4pt, breaklines=true, showstringspaces=false, aboveskip=6pt, belowskip=4pt,
+  captionpos=t, xleftmargin=2pt}
+\renewcommand{\lstlistingname}{コード}
+\usepackage[hidelinks]{hyperref}
+\graphicspath{{figures/}}
+
+% monochrome emphasis box
+\newtcolorbox{keybox}[1]{enhanced, colback=white, colframe=black, boxrule=0.6pt, arc=0pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt, fonttitle=\bfseries, coltitle=black,
+  colbacktitle=black!12, title={#1}}
+
+\title{Gemma 4 のサービング性能\\[2pt]
+\large H100 NVL 1 基 / vLLM 0.32 での TTFT・Decode・MTP Drafter の実測と理論限界}
+\author{}
+\date{2026年10月}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Gemma~4 ファミリ（E2B, E4B, 12B, 26B-A4B MoE, 31B Dense）を NVIDIA H100~NVL 1 基上の vLLM 0.32.0 で
+OpenAI 互換サーバとして動かし，TTFT，TPOT，同時実行時のスループット，および公式 MTP Drafter によるspeculative decodingの効果を測定した．
+比較対象は Qwen3-30B-A3B と Qwen3-32B である．
+測定値はチェックポイントから計算したroofline上の理論限界と突き合わせた．
+大きい dense モデルの decode は HBM 帯域の 70\% に達し，MTP で最大 3.1 倍速くなる．
+長いコンテキストの decode は vLLM 0.32.0 では Qwen3 より遅いが，原因は FlashAttention-4 カーネルの split-KV のバグ（128 個の CTA のうち 1 個しか働かない）であり，
+1 行の修正で 30k トークンでの TPOT は最大 4.6 倍速くなり，Qwen3 を上回る．
+一方，高並列での KV キャッシュ容量とスループットでは，Hybrid Attentionのアーキテクチャ上の利点を現状の vLLM が活かしきれていない．
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%=====================================================================
+\section{Gemma 4 とは}
+\label{sec:gemma4}
+Gemma~4 は Google DeepMind が 2026 年に公開したオープンウェイトのモデルファミリである\cite{gemma4tr,gemma4card,hfblog}．
+端末向けの E2B / E4B から，GPU 1 基で動く 12B・26B-A4B（MoE）・31B（dense）まで 5 サイズがある（図\ref{fig:family}）．
+2026 年 5 月には，speculative decoding用の小型モデル \textbf{MTP Drafter} が全サイズ向けに追加公開された\cite{gemma4x,mtpblog}．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/family.tex}\end{adjustbox}
+\caption{Gemma 4 ファミリ．E2B/E4B は総パラメータの約半分が層ごとのembeddingテーブル（PLE）で，26B-A4B は MoE である．
+どちらも 1 トークンの decode で実際に読むパラメータは総数よりずっと少ない（数値は本書で測ったチェックポイントの値）．}
+\label{fig:family}
+\end{figure}
+
+Gemma~4 には，同じ性能をより少ない計算量とメモリで出すための工夫が多い．
+\begin{itemize}
+\item \textbf{Hybrid Attentionと K=V}：大半の層を sliding window Attentionにして，長いコンテキストでの KV キャッシュを減らす．global 層では value を key と同じprojectionから作る（V projectionの重みを持たない）．
+\item \textbf{KV 共有と PLE}（E2B/E4B）：後段の層が前段の KV を再利用する．巨大なembeddingテーブルは lookup だけで済ませる．
+\item \textbf{MoE}（26B-A4B）：1 トークンで使う重みを総 25B のうち 3.8B に絞る．
+\item \textbf{MTP Drafter}：小型の drafter が次の数トークンを予測し，本体が 1 回の forward でまとめてverifyする．
+\end{itemize}
+いずれも，サービスとして動かしたときの応答開始までの時間，生成速度，同時に処理できるリクエスト数に直接効くはずの設計である．
+ただし，その効果が実際の推論エンジン上でどれだけ表れるかは，公式資料だけでは分からない．
+
+\begin{keybox}{本書の目的}
+Gemma~4 の\textbf{サービング性能}を，同じ GPU・同じ推論エンジン（H100~NVL 1 基，vLLM 0.32）の上で測り，
+同クラスの Qwen3（30B-A3B MoE / 32B dense）と比較する．
+測定値はすべてチェックポイントから計算した理論限界と突き合わせ，
+\textbf{どこまで性能を出し切れているか}と\textbf{何が律速しているか}を数値で示す．
+\end{keybox}
+
+%=====================================================================
+\section{はじめに}
+モデルカードが報告するのは主に精度であり，推論速度は GPU と推論エンジンの組み合わせで大きく変わる．
+本書では Gemma~4 の設計上の工夫が，実際のサービング性能にどう表れるかを次の 4 つの問いで調べる．
+\begin{description}
+\item[Q1] Gemma~4 は GPU の性能（HBM 帯域・演算性能）をどこまで出し切れているか．
+\item[Q2] Hybrid Attention・K=V・MoE は，同クラスの Qwen3 に対して実際に速さや容量の差を生むか．
+\item[Q3] MTP Drafter はどの条件でどれだけ速くなるか．効果の差は何で決まるか．
+\item[Q4] 理論値に届かない場合，何が律速しているか．
+\end{description}
+
+\paragraph{主な結果．}
+\begin{enumerate}
+\item 31B の decode は HBM 理論帯域の 70\% に達し，ほぼ理論どおりに動く．小さいモデルと MoE は 28--38\% にとどまる．
+      Nsight Systems で分解すると，重みの読み出し以外にかかる時間（SM を埋めきれない小さな GEMM，normalizationなどの小さなカーネル群，Attention，GPU idle）は
+      モデルの大きさによらず 1 ステップ 2.7--4.6\,ms あり，読むバイトが少ない小さいモデルほどこの一定の上乗せが相対的に重くなるためである（\S\ref{sec:short}）．
+\item Hybrid Attentionは長いプロンプトの prefill で効き，32k トークンの TTFT は Qwen3 より 16--33\% 短い．
+      sliding window でAttentionの FLOPs が減るためで，その差はAttentionが FLOPs の大きな割合を占める 4k トークン以上で現れ，window size（1024）以下では差がない（\S\ref{sec:prefill}）．
+      一方，vLLM 0.32.0 では長いコンテキストの decode が，KV の読み出し量が Qwen3 の 3--4 割しかないのに Qwen3 より遅い．
+      プロファイルでは，global 層のAttentionカーネルが理論どおりのバイト数しか読んでいないのに HBM 帯域の 1\% 未満しか使っていない．
+      原因は FA4 カーネルの split-KV に分割数が渡っていないバグで，128 個の CTA のうち 1 個だけがすべての KV を読んでいた（\S\ref{sec:ctx}）．
+      1 行の修正で 30k での TPOT は E2B で 17.0\,ms から 3.7\,ms，31B で 40.7\,ms から 23.3\,ms になり，31B は Qwen3-32B（24.9\,ms）より速くなる（\S\ref{sec:ctx-fix}）．
+      この修正は upstream にすでに入っており，v0.32.1rc0 以降で使える．
+\item MTP Drafter は単一ストリームの decode を 1.35--3.1 倍速くする．効果は 31B で最大，26B-A4B で最小であり，この差は帯域のコストモデルで説明できる．
+\item 短いリクエストを高並列で処理すると，31B は 64 並列で Qwen3-32B の 0.6 倍のスループットしか出ない．KV キャッシュが足りずリクエストが待たされるが，FP8 KV キャッシュで KV 容量を 1.9 倍にしても待ち時間が減るだけでスループットは変わらない（\S\ref{sec:conc}）．
+\end{enumerate}
+
+\paragraph{本書の構成．}
+\S\ref{sec:framework} で分析に使う枠組み（rooflineモデルとspeculative decodingのコストモデル）と計測ツールを導入し，
+\S\ref{sec:env} で実験環境のハードウェア性能を示す．
+\S\ref{sec:arch} で Gemma~4 のアーキテクチャを推論性能の観点から整理し，\S\ref{sec:theory} でそれを理論限界の式に落とす．
+\S\ref{sec:method} で実験方法を述べ，\S\ref{sec:results} で結果を示す．
+\S\ref{sec:discussion} では外部の結果と比べたうえで，Qwen3 に対して良い結果だったのか，コミュニティとして何をすべきかを論じ，\S\ref{sec:tuning} でボトルネックと対策をまとめる．
+
+%=====================================================================
+\section{性能分析の枠組み}
+\label{sec:framework}
+
+\subsection{Prefill と Decode}
+LLM の推論 1 リクエストは，プロンプトを一括処理する \textbf{prefill} と，1 トークンずつ生成する \textbf{decode} に分かれる（図\ref{fig:pd}）\cite{kotoba}．
+本書では次の 3 つの指標を使う．
+\begin{itemize}
+\item \textbf{TTFT}（Time To First Token）：リクエストを送ってから最初のトークンが返るまでの時間．主に prefill で決まる．
+\item \textbf{TPOT}（Time Per Output Token）：2 トークン目以降の 1 トークンあたりの生成時間．decode 1 ステップの時間に等しい．
+\item \textbf{スループット}：全リクエスト合計の出力トークン数 / 秒．同時実行数を増やすと上がる．
+\end{itemize}
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/prefill_decode.tex}\end{adjustbox}
+\caption{1 リクエストの処理の流れ．prefill と decode では律速要因が異なる．}
+\label{fig:pd}
+\end{figure}
+
+\subsection{rooflineモデル}
+\label{sec:roofline}
+ある処理が $F$ [FLOP] の演算と $Q$ [byte] のメモリ転送を必要とするとき，
+演算ピーク $\pi$ [FLOP/s]，メモリ帯域 $\beta$ [byte/s] の GPU での実行時間は
+\begin{equation}
+t \;\ge\; \max\!\left(\frac{F}{\pi},\ \frac{Q}{\beta}\right)
+\label{eq:roofline}
+\end{equation}
+で下から抑えられる．演算と転送が完全に重なった理想的な状態でも，どちらか遅い方より速くはならないからである．
+両辺を $F$ で割ると，到達できる演算性能は $F/t \le \min(\pi,\ I\beta)$ となる．ここで $I = F/Q$ を\textbf{arithmetic intensity}（1 byte 転送あたりの演算量）と呼ぶ．
+これを図にしたものがroofline（図\ref{fig:roofline-concept}）で，折れ曲がる点
+\begin{equation}
+I^\ast = \pi / \beta
+\end{equation}
+を\textbf{ridge point}と呼ぶ．$I < I^\ast$ ならメモリ帯域律速，$I > I^\ast$ なら計算律速である．
+式\eqref{eq:roofline}はキャッシュ，カーネル起動，CPU 側の処理を無視した下限なので，
+\textbf{実測値と下限の差}が「その他の要因」による損失，つまり改善の余地を表す．
+
+\paragraph{LLM への適用．}
+BF16 の重みは 1 パラメータ 2\,byte で，1 トークンの計算では各パラメータを 1 回の積和（2\,FLOP）に使う．
+decode で $B$ 本の系列を 1 ステップ進めるとき，重みは $B$ 本で共有して 1 回だけ読めばよいので，
+$F \approx 2NB$，$Q \approx 2N$（$N$ はパラメータ数）となり，$I \approx B$ である．
+同様に，$P$ トークンの prefill では $I \approx P$ になる．
+この関係は LLM 推論の性能分析でよく使われるもので，文献\cite{kotoba} は「バッチサイズ＝合計トークン数と考えるとシンプル」と述べ，
+文献\cite{kipply} は A100 では同じ議論から「バッチサイズ 208 未満の decode はメモリ帯域律速」と見積もっている．
+ここでの $I \approx B$ は重みの読み出しだけを数えた近似であり，KV キャッシュは系列ごとに別に読むので，コンテキストが長いと実際の $I$ はこれより小さい．
+したがって decode は同時実行数 $B$ が $I^\ast$ を超えるまでメモリ帯域律速で，prefill は数百トークン以上で計算律速になる．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/roofline_concept.tex}\end{adjustbox}
+\caption{本機（H100 NVL）のrooflineと典型的な動作点．decode のarithmetic intensityはバッチサイズ $B$，prefill はプロンプト長 $P$ にほぼ等しい．}
+\label{fig:roofline-concept}
+\end{figure}
+
+\subsection{speculative decodingのコストモデル}
+\label{sec:specmodel}
+speculative decodingでは，軽い drafter が $\gamma$ トークンを順に予測し，
+本体（target）が $\gamma+1$ 位置を 1 回の forward でまとめてverifyする（図\ref{fig:specdec}）．
+先頭から一致したトークンと，target 自身が出す 1 トークンが確定する．
+1 回のverifyで確定するトークン数の平均を\textbf{mean acceptance length} AL（$1 \le \mathrm{AL} \le \gamma+1$）とする．
+greedy 生成なら出力は通常の decode と完全に一致する．
+
+1 回のspeculative step（drafter $\gamma$ 回＋verify 1 回）の時間が通常の decode 1 ステップの $c$ 倍だとすると，
+$c$ ステップ分の時間で AL トークンが確定するので，
+\begin{equation}
+\text{TPOT 高速化} = \frac{\text{TPOT}_\text{base}}{\text{TPOT}_\text{spec}} = \frac{\mathrm{AL}}{c}
+\label{eq:spec}
+\end{equation}
+となる．AL は drafter の予測精度，つまり生成内容で決まる．$c$ は drafter とverifyの\emph{コスト}で，モデル構造とハードウェアで決まる．
+両者を分けて測れば，「acceptance rateが低いから遅い」のか「verifyが高くつくから遅い」のかを区別できる．
+$c$ の理論値は \S\ref{sec:theory-spec} で導く．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/specdec.tex}\end{adjustbox}
+\caption{通常の decode とspeculative decoding．speculative step 1 回で平均 AL トークンが確定し，時間は通常の $c$ 倍かかる．}
+\label{fig:specdec}
+\end{figure}
+
+\subsection{GPU の実行モデル：SM・CTA・wave と latency}
+\label{sec:gpu-model}
+ルーフラインは「十分な並列度がある」ことを前提にした上限である．
+実測が上限から遠いとき，その原因を調べるには GPU がカーネルをどう実行するかを知っておく必要がある\cite{nvperf,cudaguide}．
+
+\paragraph{SM と CTA．}
+H100 NVL は 132 個の \textbf{SM}（Streaming Multiprocessor）を持つ\cite{h100wp}．
+カーネルは \textbf{CTA}（Cooperative Thread Array，CUDA では thread block）の集まり（grid）として起動され，1 つの CTA は 1 つの SM 上で実行される．
+CTA は 32 thread ずつの \textbf{warp} に分かれ，SM は最大 64 warp（2048 thread）を同時に抱えて，待ちの発生した warp から別の warp に切り替えながら実行する．
+同時に実行される CTA の一群を \textbf{wave} と呼ぶ．NVIDIA は，CTA の数を SM の数の数倍以上にして複数の wave で実行するのが効率的だとしている\cite{nvperf}．
+CTA が SM より少ないと，仕事のない SM が生じ，その SM の演算器もメモリ帯域も使われない（図\ref{fig:smfill}(a)）．
+
+\paragraph{latency hiding と Little の法則．}
+HBM からのロードには数百 ns かかる．この待ち時間（latency）の間も帯域を埋めるには，常に大量のロードを発行中にしておく必要がある．
+Little の法則によれば，到達できる帯域は「発行中のバイト数 / latency」で決まる\cite{volkov}．
+仮に latency を 500\,ns とすると，3.9\,TB/s を出すには約 2\,MB，SM 1 個あたり十数 KB のロードを常に発行中にしておかなければならない．
+SM 上の warp が少ない（occupancy が低い）か，1 warp が逐次にしかロードを出さないと，この条件を満たせない（図\ref{fig:smfill}(b)）．
+このとき処理はメモリ律速でも計算律速でもなく，\textbf{latency 律速}になる．NVIDIA のガイドも，並列度が足りない処理はプロセッサが使い切られず latency で性能が決まるとしている\cite{nvperf}．
+
+\paragraph{カーネル単位の固定費．}
+カーネル 1 個の実行には，中身の計算とは別に，起動・終了と SM への CTA の割り当てにかかる固定的な時間（数 µs）がある．
+CUDA Graph\cite{cudaguide} はカーネル列をまとめて登録し，CPU からの起動コストを省くが，GPU 上でのカーネルごとの固定費とカーネル間の隙間は残る．
+1 ステップに数百個の小さなカーネルが並ぶと，この固定費が積み上がる．
+
+\paragraph{本書での使い方．}
+Nsight Systems からはカーネルごとの時間と grid の大きさ（CTA 数）が，Nsight Compute からは DRAM・SM の使用率とアクティブ warp の割合（achieved occupancy）が得られる．
+\S\ref{sec:short} と \S\ref{sec:ctx} では，これらを使って「CTA が SM を埋めているか」「latency を隠せるだけの warp があるか」を確かめる．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/sm_fill.tex}\end{adjustbox}
+\caption{本書で観測した 2 つの並列度不足．(a) E2B の decode の GEMM は 43 CTA しかなく，132 SM のうち 89 個に仕事がない．(b) vLLM 0.32.0 の Gemma~4 の global 層の Attention カーネルは 128 個の split-KV の CTA を起動するが，バグのため split 0 の 1 個だけが KV 全体を読み，残りの 127 個は空の範囲を受け取ってすぐに終わる．}
+\label{fig:smfill}
+\end{figure}
+
+\subsection{計測とプロファイリングのツール}
+分析は「理論限界を計算する → 実測する → 比をとる → 限界から遠ければプロファイラで原因を特定する」の順で進める．
+使った道具を表\ref{tab:tools}にまとめる．
+
+\begin{table}[htbp]\centering\small
+\caption{本書で使う計測・分析ツール．}
+\label{tab:tools}
+\begin{tabular}{lL{0.36\linewidth}L{0.33\linewidth}}\toprule
+ツール & 何が分かるか & 本書での用途 \\\midrule
+ストリーミングクライアント & ユーザから見た TTFT・TPOT・スループット & 全実験の主指標 \\
+vLLM の \texttt{/metrics} & speculative decodingのdraft数・accepted token 数 & AL と位置ごとのacceptance rate \\
+マイクロベンチマーク & 本機で実際に出る GEMM 性能と HBM 帯域 & rooflineの天井を実測値で引き直す \\
+Nsight Systems & タイムライン，カーネル別の時間，GPU のidle時間 & decode 1 ステップの時間内訳 \\
+Nsight Compute & カーネル単位のハードウェアカウンタ（DRAM・SM 使用率，アクティブ warp） & 律速要因（帯域・演算・latency）の判定 \\
+\bottomrule\end{tabular}
+\end{table}
+
+%=====================================================================
+\section{実験環境とハードウェア理論値}
+\label{sec:env}
+\begin{table}[htbp]\centering\small
+\caption{実験環境．GPU の理論値は NVIDIA H100 NVL データシート\cite{h100}（1 GPU あたり）．Tensor Core 性能は dense 値（データシートの ``with sparsity'' 値の 1/2）．}
+\label{tab:hw}
+\begin{tabular}{lp{0.68\linewidth}}\toprule
+項目 & 値 \\\midrule
+GPU & NVIDIA H100 NVL（PCIe Gen5，Hopper GH100，132 SM）\\
+GPU メモリ & 94\,GB HBM3（95{,}830\,MiB 認識）\\
+HBM 帯域（理論）$\beta$ & 3.9\,TB/s \\
+BF16 Tensor Core（dense）$\pi$ & 835\,TFLOPS（最大ブースト 1{,}785\,MHz 換算の上限は 965\,TFLOPS）\\
+FP8 Tensor Core（dense） & 1{,}671\,TFLOPS \\
+L2 キャッシュ / TDP & 60\,MiB / 400\,W \\
+\textbf{実測}（マイクロベンチ） & \input{tables/microbench_inline.tex} \\
+CPU / RAM & AMD EPYC 9V84（40 vCPU）/ 314\,GiB \\
+ソフトウェア & Driver 595.91.07，CUDA 13.2，PyTorch 2.13.0+cu130，vLLM 0.32.0，Transformers 5.19 \\
+\bottomrule\end{tabular}
+\end{table}
+
+\S\ref{sec:roofline} のridge pointは，データシート値で $I^\ast = 835 / 3.9 \approx 214$\,FLOP/byte，
+本機の実測値で $(492\text{--}514) / 3.57 \approx 138\text{--}144$\,FLOP/byte である．
+decode のarithmetic intensityは $I \approx B$ なので，dense モデルの decode は同時実行数が 140--210 程度になるまで帯域律速である．
+なお H100 NVL は TDP が 400\,W と低く，大きな GEMM では電力制限でクロックが下がるため，実測の GEMM 性能はデータシートの 59--62\% にとどまる．
+同じマイクロベンチを日を変えて 4 回測ると，HBM 帯域は 3.57--3.58\,TB/s で安定していたが，GEMM ピークは 492--514\,TFLOPS と 4\% ほど変わった．電力制限によるクロックの揺れと考えられる．
+
+%=====================================================================
+\section{Gemma 4 のアーキテクチャと推論上の工夫}
+\label{sec:arch}
+公式テクニカルレポート\cite{gemma4tr}，モデルカード\cite{gemma4card}，Hugging Face ブログ\cite{hfblog}，
+MTP の告知\cite{gemma4x,mtpblog}から推論性能に関係する事項を抜き出し，数値は各モデルの \texttt{config.json} で確認した（表\ref{tab:arch}，図\ref{fig:layers}）．
+
+\begin{table}[htbp]\centering\small
+\caption{Gemma 4 と比較モデルの構成（\texttt{config.json} より）．Q/KV ヘッドと head dim は local 層の値で，括弧内は global 層の値．}
+\label{tab:arch}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrl}\toprule
+モデル & 層 & hidden & Q / KV heads & head dim & window & global 層 & 特徴 \\\midrule
+E2B & 35 & 1536 & 8 / 1 (1) & 256 (512) & 512 & 7 & PLE，KV 共有 20/35 層 \\
+E4B & 42 & 2560 & 8 / 2 (2) & 256 (512) & 512 & 7 & PLE，KV 共有 18/42 層 \\
+12B & 48 & 3840 & 16 / 8 (1) & 256 (512) & 1024 & 8 & K=V（global），encoder-free \\
+26B-A4B & 30 & 2816 & 16 / 8 (2) & 256 (512) & 1024 & 5 & MoE 128 expert top-8 + dense MLP，K=V \\
+31B & 60 & 5376 & 32 / 16 (4) & 256 (512) & 1024 & 10 & K=V（global）\\\midrule
+Qwen3-30B-A3B & 48 & 2048 & 32 / 4 & 128 & -- & 48 & MoE 128 expert top-8 \\
+Qwen3-32B & 64 & 5120 & 64 / 8 & 128 & -- & 64 & dense \\
+\bottomrule\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/layers.tex}\end{adjustbox}
+\caption{各モデルの層構成．E2B は 4:1，ほかは 5:1 で local 層と global 層が並ぶ．E2B/E4B の後段（括弧の範囲）は KV 共有区間で，この区間の global 層も前段の global 層の KV を再利用する（詳細は図\ref{fig:kvshare}）．Qwen3 は全層が global である．}
+\label{fig:layers}
+\end{figure}
+
+\subsection{Hybrid Attentionと global 層の K=V}
+local 層は直近 $w$ トークン（512 または 1024）だけにattend するので，KV キャッシュはwindow sizeで頭打ちになる（図\ref{fig:attn}）．
+コンテキスト長に比例して KV が増えるのは global 層だけで，31B では 60 層中 10 層である．
+global 層は KV ヘッドを 1--4 個に絞って head dim を 512 に広げ，RoPE は head dim の 1/4 だけに掛ける（p-RoPE，$p=0.25$）．
+12B/26B/31B の global 層はさらに K=V で，V projectionの重みを持たず，K と同じprojectionの出力から V を作る．
+
+ただし \textbf{K=V でも，現行の実装では KV キャッシュは減らない}．
+Transformers と vLLM の実装を確認すると，K はprojectionの出力にnormalization（重みあり）と RoPE を掛けたもの，V は同じ出力に重みなしのnormalizationだけを掛けたもので，両者は別のテンソルとしてキャッシュに格納される（vLLM は K projectionの重みを V の枠にも読み込んで同じ計算をする）．
+K=V が減らすのは V projectionの重みと計算であり，KV キャッシュの量ではない．
+RoPE を掛ける前の K を 1 つだけ保存し，読み出し時に V と K を作り分ければ global 層の KV を半分にできる余地はあるが，本書の理論値（\S\ref{sec:theory}）は実装どおり K と V の両方を数える．
+vLLM での実装をコード\ref{lst:kveqv}に示す．window sizeは層ごとにAttentionモジュールへ渡され，global 層では \texttt{None}（窓なし）になる．
+\lstinputlisting[float=htbp, caption={vLLM の Gemma~4 Attention層（抜粋）．\texttt{\# <-} 以降は筆者の注記（以下同様）．}, label={lst:kveqv}]{code/kv_eq_v.py}
+
+
+推論への効果は 2 つある．1 つは長いコンテキストでの KV の格納量と読み出し量が減ること，
+もう 1 つは prefill のAttention計算が local 層ではプロンプト長に比例するだけで済むことである（\S\ref{sec:theory-prefill}）．
+ただしwindow size以下の短いコンテキストでは，ヘッド数の多い local 層の KV が効いてくる．
+1 トークン・1 層あたりの KV は 31B の local 層が $16 \times 256 \times 2$ 要素で，Qwen3-32B（$8 \times 128 \times 2$）の 4 倍ある．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/attention.tex}\end{adjustbox}
+\caption{local 層と global 層のAttention mask（左・中，灰色が参照する key）と，31B で 1 トークン・1 層が持つ KV（右，帯の長さが要素数に比例）．}
+\label{fig:attn}
+\end{figure}
+
+\subsection{KV 共有（E2B/E4B）}
+通常の Transformer では，各層が自分の K/V projectionで KV を作り，KV キャッシュに保存する．
+E2B/E4B では後段の層（E2B は 35 層中 20 層，E4B は 42 層中 18 層）がこれを省き，
+KV を作る区間の\emph{最後の同じ種類の層}の KV をそのまま使う（図\ref{fig:kvshare}）．
+E2B では，共有区間の local 層 16 個はすべて第 14 層の KV を，global 層 4 個は第 15 層の KV を参照する．
+共有層は K/V projectionの重みを持たず，query だけを計算する（コード\ref{lst:kvshare}）．
+なお E2B では，その代わりに共有層の MLP の中間次元が 2 倍（6144 → 12288）になっている（\texttt{use\_double\_wide\_mlp}）．
+
+推論への効果は\textbf{格納量と読み出し量で異なる}．
+KV キャッシュに保存されるのは 15 層分だけなので，32k トークンのリクエスト 1 本の KV は 462\,MiB から 198\,MiB に減り，同時に載せられるリクエスト数が増える．
+一方，共有層もAttention計算のたびに参照先の KV を読むので，decode 1 ステップの KV 読み出しは 35 層分のままである．
+つまり KV 共有は容量には効くが，長いコンテキストでの帯域は減らさない．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/kv_share.tex}\end{adjustbox}
+\caption{E2B の KV 共有．第 16--35 層は KV を作らず，第 14 層（local）と第 15 層（global）が保存した KV を読む．白は local 層，黒は global 層，斜線は KV 共有の local 層．}
+\label{fig:kvshare}
+\end{figure}
+
+\lstinputlisting[float=htbp, caption={vLLM の KV 共有の実装（抜粋）．参照先は「共有区間より前にある，同じ種類の最後の層」である．}, label={lst:kvshare}]{code/kv_share.py}
+
+\subsection{Per-Layer Embeddings（PLE，E2B/E4B）}
+通常のembeddingは，トークン id から 1 本のベクトルを引いて第 1 層に入れるだけである．
+PLE ではこれに加えて，\emph{層ごとに}専用の小さなベクトル $e_\ell$（256 次元）を各トークンに与える（図\ref{fig:ple}）．
+$e_\ell$ は，PLE 表から引いたトークン固有の成分と，通常のembedding $x_t$ をprojectionした文脈成分の和である．
+各層はAttentionと MLP の後に，hidden を 256 次元に絞ったgateと $e_\ell$ のelement-wise productをとり，元の次元に戻してresidualに足す（コード\ref{lst:ple}）．
+
+PLE 表は $262144 \times (35 \times 256)$ と巨大で，E2B の総 5.1B パラメータのうち 2.35B を占める．
+しかし 1 トークンで使うのはその 1 行（17.9\,KB）だけで，本体の重みのように毎ステップ全体を読む必要はない．
+そのため E2B が decode で毎ステップ読む重みは，本体と LM head を合わせた 2.3B 分（4.6\,GB）に収まる．
+図\ref{fig:family} で E2B/E4B の「読むパラメータ」が総数の約半分なのはこのためである．
+
+一方，Gemma~4 は入力embeddingと LM head を共有しており，ロジット計算では $262144 \times 1536$ の行列全体を毎ステップ読む．
+E2B ではこの LM head が decode の読み出しバイトの 17\% を占める．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/ple.tex}\end{adjustbox}
+\caption{E2B の Per-Layer Embeddings．(a) トークンごとに 35 層分の入力 $e_1, \dots, e_{35}$ を作り，(b) 第 $\ell$ 層は $e_\ell$ をgate付きでresidualに足す．(c) PLE 表は大きいが，decode で読むのは 1 行だけである．}
+\label{fig:ple}
+\end{figure}
+
+\lstinputlisting[float=htbp, caption={vLLM の PLE の実装（抜粋）．(a) は図\ref{fig:ple}(a)，(b) は図\ref{fig:ple}(b) に対応する．PLE 表は \texttt{embed\_tokens\_per\_layer} の行を引くだけである．}, label={lst:ple}]{code/ple.py}
+
+\subsection{MoE（26B-A4B）}
+各層で 128 個の routed expert（中間次元 704）から top-8 を選び，常に通る dense MLP（中間次元 2112）と足し合わせる（図\ref{fig:moe}，コード\ref{lst:moe}）．
+1 トークンが読む重みは約 3.8B（7.65\,GB）で，総 25.2B の 15\% である．
+ただしバッチ内の各トークンは別々の expert を選ぶので，$B$ トークンのバッチで読む expert の割合は増えていく（図\ref{fig:moe} 右，式は \S\ref{sec:theory-decode}）．
+\textbf{この割合は，各トークンが 128 個の expert を等しい確率で，ほかのトークンと独立に選ぶと仮定した理論値である．}
+実際のルーティングには偏りがあり，同じ expert に選択が集中すれば，読む割合はこれより小さくなる．本書ではルーティングの実測はしていない．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/moe.tex}\end{adjustbox}
+\caption{26B-A4B の MoE ブロック（左）と，バッチ内トークン数 $B$ に対して 1 ステップで読む routed expert の割合 $1-(1-8/128)^B$（右）．右は全 expert が等確率・独立に選ばれると仮定した理論値．}
+\label{fig:moe}
+\end{figure}
+
+\lstinputlisting[float=htbp, caption={vLLM の MoE ブロック（抜粋）．dense MLP と expert は同じ層の入力から並列に計算され，それぞれnormalizationしてから足される．}, label={lst:moe}]{code/moe.py}
+
+\subsection{MTP Drafter}
+MTP Drafter は 4 層（local 3 + global 1）の小型 Transformer で，
+target の最終層の hidden state と直前トークンのembeddingを連結し，projectionして入力にする（図\ref{fig:mtp-arch}）．
+2 トークン目以降のdraftでは，target の hidden の代わりに drafter 自身の出力を target の次元にprojectionし直したものを使う．
+drafter は自前の KV キャッシュを持たない．local 層は target の最後の local 層，global 層は最後の global 層の KV を参照する．
+vLLM の実装では，$\gamma$ 回のdraftはすべて同じ位置（target が最後に処理した位置）で計算され，draftしたトークンは KV に書き込まれない．
+drafter が自分のdraftを知る手がかりは，戻される hidden とトークンのembeddingだけである（コード\ref{lst:mtp}）．
+このため drafter 側の prefill が不要で，draft length $\gamma$ を自由に選べる．
+E2B/E4B の drafter は，vocabulary 262k 全体ではなく，2048 個のクラスタcentroidから選んだ top-32 クラスタ（約 4k 語）だけでロジットを計算する（コード\ref{lst:centroids}）．
+drafter が 1 回に読むバイト数は target の 0.3--11\% である（表\ref{tab:theory}）．
+公式は最大 3 倍の高速化をうたい，vLLM の実装 PR\cite{vllmpr} は H100・同時実行 1 で 31B（$\gamma=8$）3.19 倍，26B-A4B（$\gamma=4$）1.60 倍を報告している．
+
+\begin{figure}[htbp]\centering
+\begin{adjustbox}{max width=\linewidth}\input{diagrams/mtp.tex}\end{adjustbox}
+\caption{vLLM 実装に基づく MTP Drafter の構造．(1) 1 回目は target の最終層 hidden と直前トークンのembeddingを入力にし，(2) 2 回目以降は drafter 自身の出力を target の次元に戻して入力にする．(3) Attentionは target の最後の local 層・global 層の KV だけを参照し，(4) target が $\gamma+1$ トークンを 1 回の forward でverifyする．}
+\label{fig:mtp-arch}
+\end{figure}
+
+\lstinputlisting[float=htbp, caption={vLLM の MTP Drafter（抜粋）．(1)--(3) は図\ref{fig:mtp-arch}の番号に対応する．}, label={lst:mtp}]{code/mtp.py}
+
+\lstinputlisting[float=htbp, caption={E2B/E4B の drafter のcentroidヘッド（抜粋）．LM head 全体ではなく，選んだ 4096 語の行だけを読む．}, label={lst:centroids}]{code/centroids.py}
+
+\begin{table}[htbp]\centering\small
+\caption{Gemma 4 の工夫と，それが効くはずの局面．}
+\label{tab:arch-effect}
+\begin{tabular}{llll}\toprule
+工夫 & 減らすもの & 効くはずの局面 & 対象 \\\midrule
+Hybrid Attention & KV 量，prefill のAttention FLOPs & 長いコンテキスト & 全モデル \\
+global 層の K=V & V projection の重みと計算 & --（KV 量は現行実装では減らない） & 12B / 26B / 31B \\
+KV 共有 & KV の格納量（読み出しは減らない） & 高並列（KV 容量） & E2B / E4B \\
+PLE & decode で毎ステップ読む重み & decode 全般 & E2B / E4B \\
+MoE & decode で読む重み & 低負荷の decode & 26B-A4B \\
+MTP Drafter & target の forward 回数 & 低負荷の decode & 全モデル \\
+\bottomrule\end{tabular}
+\end{table}
+
+%=====================================================================
+\section{理論モデル}
+\label{sec:theory}
+\S\ref{sec:roofline} のrooflineを decode 1 ステップと prefill に当てはめ，必要なバイト数 $Q$ と FLOPs $F$ を
+チェックポイントから正確に数える．
+重みは safetensors のヘッダから\{本体，routed expert，embedding/LM head，PLE テーブル，視覚・音声エンコーダ\}に分類し（エンコーダはテキスト生成では使わないので除外），
+KV は \texttt{config.json} の層種別・window size・KV ヘッド数・KV 共有から層ごとに計算する．
+
+\paragraph{記号．}
+$W_\text{body}$：本体の重み（Attentionのprojection，dense MLP，normalization）のバイト数，
+$W_\text{LM}$：LM head のバイト数，$W_\text{exp}$：routed expert 全体のバイト数，$E$：expert 数，$k$：1 トークンが選ぶ expert 数．
+層 $\ell$ について，$w_\ell$：window size（global 層は $\infty$），$h^q_\ell$：query ヘッド数，$d_\ell$：head dim，
+$b_\ell = 2 \cdot h^{kv}_\ell \cdot d_\ell \cdot 2$\,byte：1 トークンあたりの KV バイト数（K と V の 2 つ．K=V の層も，実装では K と V を別々に格納するので 2 とする）．
+$\mathcal{L}$，$\mathcal{G}$：local 層と global 層の集合（KV 共有層も含む）．
+
+\subsection{Decode の読み出しバイト}
+\label{sec:theory-decode}
+同時実行数 $B$，コンテキスト長 $L$ の decode 1 ステップで HBM から読むバイト数を
+\begin{equation}
+Q(B,L) = W_\text{body} + W_\text{LM} + W_\text{exp}\,f(B)
+ + B\Bigl(\underbrace{\sum_{\ell\in\mathcal{L}} b_\ell \min(L, w)}_{\text{local 層}}
+ + \underbrace{\sum_{\ell\in\mathcal{G}} b_\ell\, L}_{\text{global 層}}\Bigr),
+\qquad f(B) = 1-\Bigl(1-\frac{k}{E}\Bigr)^{B}
+\label{eq:bytes}
+\end{equation}
+とする．各項の根拠は次のとおりである．
+\begin{itemize}
+\item \textbf{本体の重み $W_\text{body}$}：$B$ 本の系列は 1 つの GEMM にまとめて計算されるので，重みはバッチ全体で 1 回読めばよく，$B$ によらない．
+      重みは数 GB 以上あり L2（60\,MiB）には載らないので，毎ステップ HBM から読み直す．
+\item \textbf{LM head $W_\text{LM}$}：次トークンの分布を出すにはvocabulary 262{,}144 語すべてのロジットが必要で，LM head 全体を毎ステップ読む．
+      入力側のembeddingと PLE テーブルは $B$ 行を引くだけなので無視できる．
+\item \textbf{routed expert $W_\text{exp} f(B)$}：選ばれなかった expert は読まない．
+      各トークンが $E$ 個から $k$ 個を独立・一様に選ぶと仮定すると，ある expert が $B$ トークンの誰にも選ばれない確率は $(1-k/E)^B$ なので，
+      読む expert の割合の期待値は $f(B)$ になる．$B=1$ では $k/E$（26B-A4B で 6.3\%），$B$ が大きいと 1 に近づく．
+      実際のルーティングには偏りがあり，トークン同士が同じ expert を選びやすければ実際の読み出しはこれより少ない．
+      本書で MoE の読み出しバイトとして示す値（表\ref{tab:theory}，\S\ref{sec:theory-spec}，\S\ref{sec:results}）は，すべてこの一様・独立の仮定による理論値である．
+\item \textbf{KV}：重みと違って KV は系列ごとに別なので $B$ 倍になる．
+      \textbf{local 層と global 層は，参照するトークン数と 1 トークンあたりの KV の両方が違う}ので分けて足す（表\ref{tab:kvterm}）．
+      local 層は直近 $\min(L, w)$ トークンしか参照しないので，$L > w$ では $L$ によらない定数になる．
+      global 層は全 $L$ トークンを参照するので $L$ に比例するが，KV ヘッドが少ない（1--4 個）ので $b_\ell$ は小さい．
+      KV 共有層は KV を格納しないが読み出しは行うので，どちらの和も共有層を含む全層についてとる．
+      同じ和を KV を持つ層だけについてとったものが，KV の格納量（\S\ref{sec:theory-kvstore}）になる．
+\end{itemize}
+
+\begin{table}[htbp]\centering\small
+\caption{式\eqref{eq:bytes}の KV 項の中身（BF16，1 系列あたり）．30k は $L=30{,}000$ での 1 ステップの読み出し量．}
+\label{tab:kvterm}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{llrrrrr}\toprule
+モデル & 層 & 層数 & $b_\ell$（KV / トークン） & 参照するトークン数 & 30k で 1 層 & 30k で全層 \\\midrule
+Gemma4 E2B & local & 28 & 1\,KiB（1 head $\times$ 256） & $\min(L, 512)$ & 0.5\,MiB & 14\,MiB \\
+           & global & 7 & 2\,KiB（1 head $\times$ 512） & $L$ & 59\,MiB & 410\,MiB \\
+Gemma4 31B & local & 50 & 16\,KiB（16 head $\times$ 256） & $\min(L, 1024)$ & 16\,MiB & 800\,MiB \\
+           & global & 10 & 8\,KiB（4 head $\times$ 512） & $L$ & 234\,MiB & 2.3\,GiB \\\midrule
+Qwen3-32B  & global & 64 & 4\,KiB（8 head $\times$ 128） & $L$ & 117\,MiB & 7.3\,GiB \\
+\bottomrule\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Decode の FLOPs とステップ時間の下限}
+\begin{equation}
+F(B,L) = B\Bigl(2N_\text{active} + \sum_\ell 4\, h^{q}_\ell\, d_\ell \min(L,w_\ell)\Bigr)
+\label{eq:flops}
+\end{equation}
+\begin{itemize}
+\item \textbf{線形層}：1 トークンにつき，使われるパラメータ（本体＋選ばれた expert＋LM head，計 $N_\text{active}$ 個）を 1 回ずつ積和に使うので $2N_\text{active}$ FLOP．
+\item \textbf{Attention}：query ヘッド 1 個につき，$\min(L,w_\ell)$ 個の key との内積（$QK^\top$）に $2d_\ell \min(L,w_\ell)$ FLOP，
+      その重みで value を足し合わせる（$PV$）のに同じだけかかり，計 $4d_\ell \min(L,w_\ell)$ FLOP．
+      GQA は KV ヘッドを減らすが query ヘッドは減らさないので，$h^q_\ell$ 倍する．
+\end{itemize}
+式\eqref{eq:roofline}から，ステップ時間の下限は $t_\text{step} \ge \max(Q/\beta,\ F/\pi)$ である．
+本書の条件（$B \le 64$）では $I = F/Q \lesssim 64 < I^\ast$ なので，常にバイト数の項が効き，
+$\text{TPOT}_\text{min} = t_\text{step}(B{=}1) \approx Q(1,L)/\beta$ となる．
+実測の TPOT からは \textbf{HBM 利用率} $= \bigl(Q/\text{TPOT}\bigr)/\beta$ を求め，理論帯域をどれだけ使えているかの指標にする．
+
+\subsection{Prefill の FLOPs}
+\label{sec:theory-prefill}
+プロンプト長 $P$ に対し
+\begin{equation}
+F_\text{prefill}(P) = 2P N_\text{body} + \sum_\ell 4h^q_\ell d_\ell \sum_{p=1}^{P}\min(p,w_\ell),
+\qquad \text{TTFT} \ge F_\text{prefill}/\pi
+\label{eq:prefill}
+\end{equation}
+とする（$N_\text{body}$ は LM head を除いた 1 トークンあたりの使用パラメータ数）．
+\begin{itemize}
+\item 線形層は $P$ トークンそれぞれに $2N_\text{body}$ FLOP かかる．LM head は最後のトークンにしか使わないので無視できる．
+\item 因果的Attentionでは，$p$ 番目のトークンは自分以前の $p$ トークン（local 層では最大 $w_\ell$ トークン）を参照するので，内側の和 $\sum_p \min(p,w_\ell)$ になる．
+      これは global 層で $P(P+1)/2$（$P^2$ に比例），local 層で $w(w+1)/2 + (P-w)w$（$P$ に比例）である．
+      \textbf{長いプロンプトでHybrid Attentionが prefill を速くするのは，$P^2$ で増える項が global 層だけに限られるから}である．
+\item prefill は $I \approx P \gg I^\ast$ なので計算律速とみなし，FLOPs を演算ピークで割って下限とする．
+      実効 FLOP レート $F_\text{prefill}/\text{TTFT}$ を $\pi$ で割った値を \textbf{prefill MFU}（Model FLOPs Utilization）と呼ぶ．MFU は PaLM\cite{palm} が導入した指標で，実装の都合で追加される計算（再計算など）を含めず，モデルが本来必要とする FLOPs だけを数えて「ピーク性能のうちどれだけを有効な計算に使えたか」を表す．
+\end{itemize}
+
+\subsection{KV キャッシュの格納量}
+\label{sec:theory-kvstore}
+1 リクエストが格納する KV は $\sum_{\ell \in \text{KV を持つ層}} b_\ell \min(L,w_\ell)$ である．
+GPU 上の KV 領域をこの値で割ると，長さ $L$ のリクエストを最大何本同時に処理できるかが分かる．
+
+\subsection{speculative decodingのステップコスト}
+\label{sec:theory-spec}
+式\eqref{eq:spec}のコスト $c$ を，帯域律速を仮定して
+\begin{equation}
+c_\text{pred}(\gamma) = \frac{Q_\text{target}(B{=}\gamma{+}1) + \gamma\, Q_\text{draft}}{Q_\text{target}(B{=}1)}
+\label{eq:cpred}
+\end{equation}
+と見積もる．
+\begin{itemize}
+\item \textbf{verify}：$\gamma+1$ 位置を 1 回の forward で処理するので，重みの読み出しは $\gamma+1$ トークンのバッチと同じである．
+      dense モデルでは式\eqref{eq:bytes}の重みの項が $B$ によらないので，$Q_\text{target}(\gamma{+}1) \approx Q_\text{target}(1)$，つまりverifyはほぼ無料である．
+      MoE では $f(\gamma{+}1)$ が $f(1)$ より大きいので，verifyのたびに読む expert が増える．
+\item \textbf{draft}：drafter を $\gamma$ 回逐次に動かし，毎回その重み $Q_\text{draft}$（E2B/E4B ではcentroidヘッドで選んだ部分の LM head を含む）を読む．
+\item verifyのarithmetic intensityは $\gamma+1 \le 9 \ll I^\ast$ なので帯域律速の仮定は成り立つ．カーネル起動などの固定費は含まないので，$c_\text{pred}$ は実際の $c$ の下限である．
+\end{itemize}
+
+\subsection{理論値の一覧}
+式\eqref{eq:bytes}--\eqref{eq:cpred}から求めた理論値を表\ref{tab:theory}に，1 トークンあたりの KV 格納量を図\ref{fig:kv}に示す．
+
+\begin{table}[htbp]\centering\small
+\caption{理論値（BF16，H100 NVL）．GB/step と TPOT$_{min}$ は $B=1,\ L=2048$．KV@32k は 32k トークンのリクエスト 1 本の KV 格納量．}
+\label{tab:theory}
+\begin{adjustbox}{max width=\linewidth}
+\input{tables/theory.tex}
+\end{adjustbox}
+\end{table}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{kv_footprint.pdf}
+\caption{1 トークンあたりの平均 KV 量．同クラスの Gemma~4 と Qwen3 の比較で，点線は Gemma~4 の全層を global とした場合．以降のグラフはすべて，マーカーの形でモデルを，塗りつぶしで dense（塗り）/MoE（白抜き）を，線種で Gemma~4（実線）/Qwen3（一点鎖線）を区別する．
+window size（1024）を超えると local 層の KV が頭打ちになり，32k では全層 global の場合の約 1/8 に下がる．
+一方，window size以下の短いコンテキストでは local 層の KV が大きく，31B は約 4.7k トークン未満で Qwen3-32B より，26B-A4B は約 2.7k トークン未満で Qwen3-30B-A3B より KV が大きい．}
+\label{fig:kv}
+\end{figure}
+
+%=====================================================================
+\section{実験方法}
+\label{sec:method}
+表\ref{tab:exp} の 9 つの実験を行った．
+実験番号は付属リポジトリの \texttt{README.md} と対応しており，実行コマンドとオプションの詳細はそちらとソースコードを参照されたい．
+
+\begin{table}[htbp]\centering\small
+\caption{実験の一覧．}
+\label{tab:exp}
+\begin{tabular}{llL{0.42\linewidth}l}\toprule
+番号 & 実験 & 目的 & 結果 \\\midrule
+E1 & 単一ストリーム & 同時実行 1 での TTFT・TPOT をプロンプト長ごとに測り，理論下限と比べる & 図\ref{fig:prefill-rate}--\ref{fig:decode-long}，表\ref{tab:measured} \\
+E2 & 同時実行数スイープ & 負荷を上げたときのスループットと遅延，帯域の償却を見る & 図\ref{fig:conc-scaling}--\ref{fig:conc-kv} \\
+E3 & speculative decoding & MTP の $\gamma$ と生成内容による AL・高速化の変化，n-gram との比較 & 図\ref{fig:mtp}--\ref{fig:mtp-load}，表\ref{tab:spec} \\
+E4 & KV 容量 & vLLM が確保する KV 領域と同時実行数の上限を理論値と比べる & 表\ref{tab:kvcap} \\
+E5 & マイクロベンチ & 本機で実際に出る GEMM 性能と HBM 帯域を測る & 表\ref{tab:hw} \\
+E6 & Nsight Systems & decode 1 ステップの時間をカーネル種別に分解する & 図\ref{fig:nsys-short}，\ref{fig:nsys-long}，\ref{fig:nsys-mtp}，表\ref{tab:nsys} \\
+E7 & Nsight Compute & 長コンテキストのAttentionカーネルの律速要因を特定する & 表\ref{tab:ncu} \\
+E8 & 追加計測 & Attention backend（Triton）と FP8 KV キャッシュで E1/E2 を測り直し，原因を確かめる．26B-A4B の MTP と E5 の再現性を確かめる & 表\ref{tab:hw}，\ref{tab:backend}，\S\ref{sec:conc} \\
+E9 & カーネル解析と修正 & decode の Attention・GEMM カーネルを単体で測り，split-KV を修正した FA4 で E1・E2（31B）・E6 を測り直す & 図\ref{fig:gemv}，\ref{fig:attn-kernel}，表\ref{tab:ctx}，\ref{tab:attn-bw}，\S\ref{sec:ctx-fix} \\
+\bottomrule\end{tabular}
+\end{table}
+
+\paragraph{サーバと計測（E1--E4）．}
+各構成で \texttt{vllm serve} を起動し（BF16，CUDA Graph 有効，最大同時系列数 128，最大長 40{,}960．31B のみ重みが 58\,GiB と大きいため 34{,}816），
+クライアントから OpenAI 互換 API にストリーミングでリクエストを送った．
+同じプロンプトを繰り返し送るので，TTFT がキャッシュで短くならないよう prefix caching は無効にした．
+TTFT は最初のトークンが届くまでの時間，TPOT は（最後のトークンの時刻 $-$ 最初のトークンの時刻）/（出力トークン数 $-1$）である．
+speculative decodingの AL は，\texttt{/metrics} のdraft数とaccepted token 数をリクエストの前後で差分して求めた．
+なお，オフライン API（\texttt{LLM.generate}）の内部タイムスタンプから求めた TTFT は物理的な下限を下回ったため使っていない．
+
+\paragraph{ワークロード．}
+実データとして Babilong と SWE-bench Lite を使い，条件を制御するために合成プロンプトも加えた（表\ref{tab:workload}）．
+greedy 生成なので，speculative decodingの有無で出力は同一であり，同じ出力の生成速度を比較できる．
+
+\begin{table}[htbp]\centering\small
+\caption{ワークロード．}
+\label{tab:workload}
+\begin{tabular}{lL{0.42\linewidth}L{0.30\linewidth}}\toprule
+名前 & 内容 & ねらい \\\midrule
+Synthetic & プロンプト約 256--16k トークン，出力 128 トークン固定，各 3 回 & 長さを細かく制御した掃引 \\
+Babilong\cite{babilong} & 長さ 1k--32k $\times$ タスク qa1--qa3 $\times$ 2 件，出力 128 トークン固定 & 実データでの長コンテキスト \\
+SWE-bench Lite\cite{swebench} & 8 リポジトリ $\times$ 3 件，パッチ生成（最大 512 トークン） & 自然な生成，ジャンル別のacceptance rate \\
+\bottomrule\end{tabular}
+\end{table}
+
+同時実行数スイープ（E2）では SWE-bench のプロンプト（平均約 1.3k トークン）を巡回させ，出力 256 トークン固定で同時実行数 $1, 2, \dots, 64$ を測った．
+
+\paragraph{プロファイリング（E5--E7）．}
+Nsight Systems では CUDA Graph 内のカーネルもノード単位で記録し，カーネル名から GEMM・MoE・Attention・normalizationなどに分類した．
+Nsight Compute では，E2B の約 30k トークン後の decode 1 ステップぶん（Attentionカーネル 35 回）のカウンタを取得した．
+
+%=====================================================================
+\input{results.tex}
+
+\begin{thebibliography}{99}
+\bibitem{gemma4tr} Gemma Team, Google DeepMind. \textit{Gemma 4 Technical Report}, 2026.
+\bibitem{gemma4card} Google. \textit{Gemma 4 model card}. \url{https://ai.google.dev/gemma/docs/core/model_card_4}
+\bibitem{hfblog} Hugging Face. \textit{Welcome Gemma 4: Frontier multimodal intelligence on device}, 2026. \url{https://huggingface.co/blog/gemma4}
+\bibitem{gemma4x} @googlegemma, X, 2026-05-05. \url{https://x.com/googlegemma/status/2051694045869879749}
+\bibitem{mtpblog} Google. \textit{Multi-token prediction in Gemma 4}. \url{https://blog.google/innovation-and-ai/technology/developers-tools/multi-token-prediction-gemma-4/}
+\bibitem{vllmpr} vLLM PR \#41745, \textit{[Spec Decode] Add Gemma4 MTP speculative decoding support}. \url{https://github.com/vllm-project/vllm/pull/41745}
+\bibitem{kipply} kipply. \textit{Transformer Inference Arithmetic}, 2022. \url{https://kipp.ly/transformer-inference-arithmetic/}
+\bibitem{kotoba} Kotoba Technologies. \textit{LLM Serving を支える技術}. \url{https://zenn.dev/kotoba_tech/articles/98feb05f24c082}
+\bibitem{babilong} Kuratov et al. \textit{BABILong}. \url{https://huggingface.co/datasets/RMT-team/babilong}
+\bibitem{swebench} Jimenez et al. \textit{SWE-bench}. \url{https://huggingface.co/datasets/SWE-bench/SWE-bench_Lite}
+\bibitem{h100} NVIDIA. \textit{H100 Tensor Core GPU Datasheet}.
+\bibitem{jarvislabs} JarvisLabs. \textit{Benchmarking Gemma 4 MTP vs DFlash on a Single H100}. \url{https://jarvislabs.ai/blog/gemma-4-mtp-vs-dflash-benchmark}
+\bibitem{inferencebench} InferenceBench. \textit{Gemma 4 31B on H100: The Complete Inference Benchmark}. \url{https://inferencebench.io/blog/gemma-4-31b-h100-complete-inference-benchmark/}
+\bibitem{vllmissue38887} vLLM Issue \#38887, \textit{Gemma 4 E4B extremely slow on v0.19.0: forced TRITON\_ATTN fallback}. \url{https://github.com/vllm-project/vllm/issues/38887}
+\bibitem{vllmpr38891} vLLM PR \#38891, \textit{[Gemma4] Allow per-layer attention backend selection for heterogeneous head dimensions}. \url{https://github.com/vllm-project/vllm/pull/38891}
+\bibitem{h100wp} NVIDIA. \textit{NVIDIA H100 Tensor Core GPU Architecture} (whitepaper), 2022.
+\bibitem{nvperf} NVIDIA. \textit{GPU Performance Background User's Guide}. \url{https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html}
+\bibitem{cudaguide} NVIDIA. \textit{CUDA C++ Programming Guide}. \url{https://docs.nvidia.com/cuda/cuda-c-programming-guide/}
+\bibitem{volkov} V. Volkov. \textit{Understanding Latency Hiding on GPUs}. PhD thesis, UC Berkeley, Technical Report UCB/EECS-2016-143, 2016.
+\bibitem{palm} A. Chowdhery et al. \textit{PaLM: Scaling Language Modeling with Pathways}. arXiv:2204.02311, 2022.
+\end{thebibliography}
+\end{document}

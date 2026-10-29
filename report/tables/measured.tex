@@ -1,0 +1,13 @@
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+Model & TTFT 1k & TTFT 32k & prefill MFU & TPOT & TPOT$_{min}$ & HBM util. & MTP speedup & AL & max out tok/s \\
+\midrule
+Gemma4 E2B & 22 & 602 & 36\% & 4.21 & 1.19 & 28\% & 1.94$\times$ & 2.78 & 6869 \\
+Gemma4 E4B & 25 & 896 & 43\% & 6.23 & 2.42 & 39\% & 2.17$\times$ & 2.90 & 4264 \\
+Gemma4 12B & 42 & 2203 & 47\% & 10.41 & 6.19 & 59\% & 1.85$\times$ & 3.20 & 1659 \\
+Gemma4 26B-A4B & 35 & 1051 & 33\% & 5.30 & 2.00 & 38\% & 1.35$\times$ & 3.46 & 2392 \\
+Gemma4 31B & 104 & 5999 & 45\% & 22.87 & 15.91 & 70\% & 3.08$\times$ & 3.58 & 533 \\
+Qwen3-30B-A3B & 45 & 1563 & 41\% & 4.56 & 1.58 & 35\% & -- & -- & 2599 \\
+Qwen3-32B & 106 & 7179 & 49\% & 22.01 & 16.45 & 75\% & -- & -- & 839 \\
+\bottomrule
+\end{tabular}

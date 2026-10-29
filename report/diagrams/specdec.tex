@@ -1,0 +1,25 @@
+% Plain decode vs. speculative decode (gamma = 4)
+\begin{tikzpicture}[x=1cm, y=1cm, font=\small,
+  tgt/.style={draw, fill=black!25, minimum height=0.6cm, minimum width=1.6cm, inner sep=0pt, align=center},
+  drf/.style={draw, fill=white, minimum height=0.6cm, minimum width=0.35cm, inner sep=0pt}]
+% plain decode
+\node[anchor=east, align=right] at (-0.2,1.6) {通常の decode};
+\foreach \i in {0,...,3} {
+  \node[tgt, anchor=west] at ({1.7*\i},1.6) {\scriptsize target};
+  \node[font=\scriptsize] at ({1.7*\i+0.8},2.15) {+1 token};
+}
+% speculative decode
+\node[anchor=east, align=right] at (-0.2,0.2) {speculative decoding\\[-2pt]\scriptsize ($\gamma=4$)};
+\foreach \j in {0,1,2,3} { \node[drf, anchor=west] at ({0.4*\j},0.2) {}; }
+\node[font=\scriptsize] at (0.8,-0.35) {draft $\times\gamma$};
+\node[tgt, anchor=west, minimum width=1.9cm] (v) at (1.65,0.2) {\scriptsize verify $\gamma{+}1$};
+\node[font=\scriptsize, align=center] at (2.6,0.85) {AL token 確定};
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}] (0,-0.65) -- (3.55,-0.65)
+  node[midway, below=4pt, font=\scriptsize] {1 speculative step $=$ 通常 step の $c$ 倍の時間};
+% legend
+\node[tgt, minimum width=0.6cm, anchor=west] at (8.0,1.0) {};
+\node[anchor=west, font=\scriptsize] at (8.65,1.0) {target（本体）の forward};
+\node[drf, anchor=west] at (8.12,0.3) {};
+\node[anchor=west, font=\scriptsize] at (8.65,0.3) {drafter の forward（軽い）};
+\node[anchor=west, font=\small] at (8.0,-0.5) {TPOT 高速化 $= \mathrm{AL}/c$};
+\end{tikzpicture}

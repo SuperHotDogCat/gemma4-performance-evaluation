@@ -1,0 +1,32 @@
+% MTP drafter (assistant model) as implemented in vLLM (gemma4_mtp.py, v1/spec_decode/gemma4.py)
+\begin{tikzpicture}[font=\small, box/.style={draw, align=center, inner sep=3pt, minimum height=0.75cm}]
+% target model
+\node[box, minimum width=3.4cm, minimum height=2.2cm, fill=black!10] (tgt) at (0,0) {};
+\node[anchor=north, font=\small] at (tgt.north) {\textbf{target（本体）}};
+\node[box, fill=white, minimum width=2.8cm] (kv) at (0,-0.05) {KV キャッシュ\\[-2pt]\scriptsize 最後の local 層 / global 層};
+\node[font=\scriptsize, anchor=south] at (0,-1.1) {最終層 hidden $h_t$};
+% drafter
+\node[box, minimum width=5.6cm, minimum height=2.2cm] (dr) at (6.7,0) {};
+\node[anchor=south east, font=\small] at (dr.south east) {\textbf{MTP drafter}（4 層）};
+\node[box, fill=white] (cat) at (4.6,-0.2) {\scriptsize concat\\[-3pt]\scriptsize ＋projection};
+\node[box, fill=white] (lay) at (6.55,-0.2) {\scriptsize local 層 $\times$3\\[-3pt]\scriptsize ＋global 層 $\times$1};
+\node[box, fill=white] (head) at (8.6,-0.2) {\scriptsize LM\\[-3pt]\scriptsize head};
+\draw[-{Stealth}] (cat) -- (lay);
+\draw[-{Stealth}] (lay) -- (head);
+% inputs
+\draw[-{Stealth}] (1.7,-0.85) -- node[below, font=\scriptsize] {(1) 1 回目} (cat.west |- 0,-0.45);
+\node[font=\scriptsize, align=center] (emb) at (3.2,-1.85) {直前のトークン\\[-2pt]のembedding};
+\draw[-{Stealth}] (emb.north) |- ([yshift=-0.12cm]cat.west);
+% feedback of the drafter's own hidden (steps 2..gamma)
+\draw[-{Stealth}, densely dotted, thick] ([xshift=0.3cm]lay.south) -- ++(0,-0.85) -| (cat.south);
+\node[font=\scriptsize, anchor=west] at (7.0,-1.62) {(2) 2 回目以降は drafter 自身の出力を戻す};
+% KV cross-attention
+\draw[-{Stealth}, densely dashed, thick] (kv.north east) .. controls (2.5,1.55) and (6.55,1.55) .. (lay.north)
+  node[pos=0.45, above, font=\scriptsize] {(3) target の KV だけを参照（drafter は KV を持たず，draftも KV に書かない）};
+% output and verification loop
+\node[box, fill=white] (draft) at (11.1,-0.2) {draft\\[-2pt]$\hat y_{1},\dots,\hat y_{\gamma}$};
+\draw[-{Stealth}] (head) -- (draft) node[midway, above, font=\scriptsize] {$\gamma$ 回};
+\draw[-{Stealth}] (draft.south) -- ++(0,-2.6) -| (tgt.south)
+  node[pos=0.25, below, font=\scriptsize] {(4) target が $\gamma{+}1$ トークンを 1 回の forward でverify};
+\node[font=\scriptsize, align=left, anchor=south west] at (9.75,0.45) {E2B/E4B は 2048 個のcentroidから\\top-32 クラスタ（約 4k 語）のみ評価};
+\end{tikzpicture}

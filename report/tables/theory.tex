@@ -1,0 +1,13 @@
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model & active [B] & text total [B] & GB/step & TPOT$_{min}$ [ms] & tok/s$_{max}$ & KV@32k [GiB] & TTFT$_{min}$@4k [ms] & draft/target bytes \\
+\midrule
+Gemma4 E2B & 2.30 & 4.6 & 4.6 & 1.19 & 840 & 0.19 & 20 & 0.6\% \\
+Gemma4 E4B & 4.70 & 7.5 & 9.4 & 2.43 & 411 & 0.52 & 41 & 0.3\% \\
+Gemma4 12B & 11.94 & 11.9 & 23.9 & 6.22 & 161 & 0.81 & 113 & 3.5\% \\
+Gemma4 26B-A4B & 3.82 & 25.2 & 7.6 & 2.02 & 494 & 0.82 & 34 & 11.0\% \\
+Gemma4 31B & 30.70 & 30.7 & 61.4 & 16.00 & 62 & 3.28 & 301 & 1.5\% \\
+Qwen3-30B-A3B & 3.04 & 30.5 & 6.1 & 1.61 & 621 & 3.00 & 35 & -- \\
+Qwen3-32B & 31.98 & 32.8 & 64.0 & 16.54 & 60 & 8.00 & 327 & -- \\
+\bottomrule
+\end{tabular}

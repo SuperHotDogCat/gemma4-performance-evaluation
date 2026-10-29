@@ -1,0 +1,194 @@
+[
+ {
+  "q": {
+   "shape": [
+    1,
+    8,
+    256
+   ],
+   "stride": [
+    2048,
+    256,
+    1
+   ],
+   "dtype": "torch.bfloat16"
+  },
+  "k": {
+   "shape": [
+    772300,
+    32,
+    1,
+    256
+   ],
+   "stride": [
+    16384,
+    512,
+    256,
+    1
+   ],
+   "dtype": "torch.bfloat16"
+  },
+  "v": {
+   "shape": [
+    772300,
+    32,
+    1,
+    256
+   ],
+   "stride": [
+    16384,
+    512,
+    256,
+    1
+   ],
+   "dtype": "torch.bfloat16"
+  },
+  "max_seqlen_q": 1,
+  "max_seqlen_k": 30015,
+  "num_splits": 0,
+  "causal": true,
+  "window_size": [
+   511,
+   0
+  ],
+  "softcap": 0,
+  "fa_version": 4,
+  "seqused_k": {
+   "shape": [
+    1
+   ],
+   "stride": [
+    1
+   ],
+   "dtype": "torch.int32"
+  },
+  "seqused_k_values": [
+   30015
+  ],
+  "cu_seqlens_q": {
+   "shape": [
+    2
+   ],
+   "stride": [
+    1
+   ],
+   "dtype": "torch.int32"
+  },
+  "cu_seqlens_q_values": [
+   0,
+   1
+  ],
+  "block_table": {
+   "shape": [
+    1,
+    1064
+   ],
+   "stride": [
+    1064,
+    1
+   ],
+   "dtype": "torch.int32"
+  },
+  "scheduler_metadata": null,
+  "dynamic_causal": null,
+  "s_aux": null,
+  "mask_mod": null,
+  "aux_tensors": null
+ },
+ {
+  "q": {
+   "shape": [
+    1,
+    8,
+    512
+   ],
+   "stride": [
+    4096,
+    512,
+    1
+   ],
+   "dtype": "torch.bfloat16"
+  },
+  "k": {
+   "shape": [
+    772300,
+    16,
+    1,
+    512
+   ],
+   "stride": [
+    16384,
+    1024,
+    512,
+    1
+   ],
+   "dtype": "torch.bfloat16"
+  },
+  "v": {
+   "shape": [
+    772300,
+    16,
+    1,
+    512
+   ],
+   "stride": [
+    16384,
+    1024,
+    512,
+    1
+   ],
+   "dtype": "torch.bfloat16"
+  },
+  "max_seqlen_q": 1,
+  "max_seqlen_k": 30015,
+  "num_splits": 0,
+  "causal": true,
+  "window_size": [
+   -1,
+   -1
+  ],
+  "softcap": 0,
+  "fa_version": 4,
+  "seqused_k": {
+   "shape": [
+    1
+   ],
+   "stride": [
+    1
+   ],
+   "dtype": "torch.int32"
+  },
+  "seqused_k_values": [
+   30015
+  ],
+  "cu_seqlens_q": {
+   "shape": [
+    2
+   ],
+   "stride": [
+    1
+   ],
+   "dtype": "torch.int32"
+  },
+  "cu_seqlens_q_values": [
+   0,
+   1
+  ],
+  "block_table": {
+   "shape": [
+    1,
+    2128
+   ],
+   "stride": [
+    2128,
+    1
+   ],
+   "dtype": "torch.int32"
+  },
+  "scheduler_metadata": null,
+  "dynamic_causal": null,
+  "s_aux": null,
+  "mask_mod": null,
+  "aux_tensors": null
+ }
+]

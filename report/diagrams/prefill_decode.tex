@@ -1,0 +1,31 @@
+% One request: prefill (all prompt tokens at once) then token-by-token decode
+\begin{tikzpicture}[x=1cm, y=1cm, font=\small,
+  blk/.style={draw, minimum height=0.8cm, inner sep=1pt, align=center}]
+% time axis
+\draw[-{Stealth}] (0,0) -- (14.6,0) node[right] {時刻};
+\node[below, font=\scriptsize] at (0,0) {要求到着};
+% prefill block
+\node[blk, fill=black!20, minimum width=4.2cm, anchor=south west] (pf) at (0,0.25)
+  {\textbf{Prefill}\\[-1pt]\scriptsize プロンプト $P$ トークンを一括処理};
+% decode steps
+\foreach \i in {0,...,5} {
+  \node[blk, fill=white, minimum width=1.2cm, anchor=south west] (d\i) at ({4.4+1.4*\i},0.25)
+    {\scriptsize step\,\pgfmathparse{int(\i+1)}\pgfmathresult};
+}
+\node[font=\small] at (13.3,0.65) {$\cdots$};
+% output tokens
+\foreach \i in {0,...,5} {
+  \draw[-{Stealth}] ({4.4+1.4*\i+0.6},1.05) -- ++(0,0.45) node[above, font=\scriptsize] {$y_{\pgfmathparse{int(\i+1)}\pgfmathresult}$};
+}
+% TTFT and TPOT braces
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}] (0,-0.45) -- (4.4,-0.45)
+  node[midway, below=4pt] {TTFT};
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}] (5.0,-0.45) -- (6.4,-0.45)
+  node[midway, below=4pt] {TPOT};
+% characteristics
+\node[align=left, font=\scriptsize, anchor=north west, text width=4.2cm] at (0,-1.25)
+  {重みを 1 回読んで $P$ トークン分を計算\\ $\Rightarrow$ arithmetic intensity $\approx P$：\textbf{計算律速}};
+\node[align=left, font=\scriptsize, anchor=north west] at (4.4,-1.25)
+  {1 step ごとに全重み＋KV キャッシュを読んで $B$ トークン分を計算（$B$：同時実行数）\\
+   $\Rightarrow$ arithmetic intensity $\approx B$：$B$ が小さいと\textbf{メモリ帯域律速}};
+\end{tikzpicture}

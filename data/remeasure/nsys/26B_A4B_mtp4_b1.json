@@ -1,0 +1,144 @@
+{
+ "span_ms": 1377.486771,
+ "gpu_busy_ms": 661.539962,
+ "gpu_busy_frac": 0.4802514085269571,
+ "num_kernels": 70100,
+ "kernel_time_by_cat_frac": {
+  "gemm": 0.40977415036368636,
+  "moe": 0.3973541820664262,
+  "norm/elementwise": 0.09444935720170032,
+  "attention": 0.08347304120614008,
+  "sampling/logits": 0.009761662019361045,
+  "other": 0.005187607142686015
+ },
+ "kernel_time_by_cat_ms": {
+  "norm/elementwise": 62.485512,
+  "other": 3.432001,
+  "sampling/logits": 6.45809,
+  "gemm": 271.097108,
+  "attention": 55.223835,
+  "moe": 262.880344
+ },
+ "top_kernels": [
+  {
+   "name": "fused_moe_kernel",
+   "ms": 233.647662,
+   "count": 4920,
+   "cat": "moe",
+   "avg_us": 47.489362195121956,
+   "avg_ctas": 1358.6341463414635
+  },
+  {
+   "name": "nvjet_sm90_tst_512x8_64x3_2x1_v_bz_TNT",
+   "ms": 84.607143,
+   "count": 410,
+   "cat": "gemm",
+   "avg_us": 206.35888536585367,
+   "avg_ctas": 132.0
+  },
+  {
+   "name": "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_TNT",
+   "ms": 47.922362,
+   "count": 6168,
+   "cat": "gemm",
+   "avg_us": 7.769513942931258,
+   "avg_ctas": 56.63618677042802
+  },
+  {
+   "name": "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_splitK_TNT",
+   "ms": 39.819627,
+   "count": 4968,
+   "cat": "gemm",
+   "avg_us": 8.015222826086957,
+   "avg_ctas": 75.88888888888889
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_sm90FlashAttentionForwardSm90_object_at__tensor000o211121021_tens",
+   "ms": 36.752792,
+   "count": 3034,
+   "cat": "attention",
+   "avg_us": 12.11364271588662,
+   "avg_ctas": 13.948582729070534
+  },
+  {
+   "name": "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_TNT",
+   "ms": 35.316483,
+   "count": 2352,
+   "cat": "gemm",
+   "avg_us": 15.015511479591837,
+   "avg_ctas": 128.0
+  },
+  {
+   "name": "triton_red_fused_3",
+   "ms": 17.029102,
+   "count": 2378,
+   "cat": "norm/elementwise",
+   "avg_us": 7.161102607232968,
+   "avg_ctas": 4.133725820016821
+  },
+  {
+   "name": "nvjet_sm90_tst_128x8_64x12_2x1_v_bz_TNT",
+   "ms": 16.311189,
+   "count": 1308,
+   "cat": "gemm",
+   "avg_us": 12.470327981651376,
+   "avg_ctas": 128.0
+  },
+  {
+   "name": "triton_red_fused_add_mul_rms_norm_2",
+   "ms": 16.18766,
+   "count": 2460,
+   "cat": "norm/elementwise",
+   "avg_us": 6.580349593495935,
+   "avg_ctas": 5.329268292682927
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_sm90FlashAttentionForwardSm90_object_at__tensor000o811121081_tens",
+   "ms": 12.836064,
+   "count": 738,
+   "cat": "attention",
+   "avg_us": 17.393040650406505,
+   "avg_ctas": 3.5447154471544717
+  },
+  {
+   "name": "triton_red_fused_add_moe_forward_mul_rms_norm_0",
+   "ms": 11.816936,
+   "count": 2460,
+   "cat": "moe",
+   "avg_us": 4.803632520325204,
+   "avg_ctas": 5.329268292682927
+  },
+  {
+   "name": "nvjet_sm90_tss_64x8_64x16_2x1_v_bz_splitK_TNT",
+   "ms": 11.550641,
+   "count": 2430,
+   "cat": "gemm",
+   "avg_us": 4.753350205761317,
+   "avg_ctas": 4.0
+  },
+  {
+   "name": "void cublasLt::splitKreduce_kernel<(int)32, (int)16, int, float, __nv_bfloat16, float, __nv_bfloat16, (bool)0, float, __",
+   "ms": 9.621452,
+   "count": 5412,
+   "cat": "gemm",
+   "avg_us": 1.77779970436068,
+   "avg_ctas": 57.99556541019955
+  },
+  {
+   "name": "void vllm::moe::moe_align_block_size_kernel<int>(const T1 *, int *, int *, int *, int *, int, int, int, int, unsigned lo",
+   "ms": 8.181658,
+   "count": 2460,
+   "cat": "moe",
+   "avg_us": 3.325877235772358,
+   "avg_ctas": 2.0
+  },
+  {
+   "name": "nvjet_sm90_tst_128x8_64x12_4x1_v_bz_TNT",
+   "ms": 7.848598,
+   "count": 405,
+   "cat": "gemm",
+   "avg_us": 19.379254320987652,
+   "avg_ctas": 80.0
+  }
+ ]
+}

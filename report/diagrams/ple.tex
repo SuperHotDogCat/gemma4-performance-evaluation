@@ -1,0 +1,64 @@
+% Per-Layer Embeddings (E2B): every token gets a 256-dim vector for each of the 35 layers.
+% Top: how the per-layer inputs e_1..e_35 are built. Bottom: how layer l consumes e_l.
+\begin{tikzpicture}[font=\small,
+  box/.style={draw, align=center, inner sep=3pt, minimum height=0.75cm},
+  op/.style={draw, circle, inner sep=0.5pt, font=\scriptsize}]
+% ---------------- (a) building the per-layer inputs
+\node[font=\small\bfseries, anchor=west] at (-0.6,1.75) {(a) 層ごとの入力ベクトルを作る（トークンごとに 1 回）};
+\node[box] (tok) at (0,0) {トークン\\[-2pt]id $t$};
+\node[box, fill=white, minimum width=2.6cm] (emb) at (3.1,0.75) {embedding table\\[-2pt]\scriptsize $262144 \times 1536$};
+\node[box, fill=black!15, minimum width=2.6cm] (pt) at (3.1,-0.75) {PLE 表\\[-2pt]\scriptsize $262144 \times (35 \times 256)$};
+\draw[-{Stealth}] (tok.east) -- (emb.west) node[midway, above, font=\scriptsize, sloped] {行 $t$};
+\draw[-{Stealth}] (tok.east) -- (pt.west) node[midway, below, font=\scriptsize, sloped] {行 $t$};
+\node[box] (x) at (6.1,0.75) {$x_t$\\[-2pt]\scriptsize 1536};
+\draw[-{Stealth}] (emb) -- (x);
+\node[box] (proj) at (8.6,0.75) {projection＋RMSNorm\\[-2pt]\scriptsize $1536 \to 35{\times}256$};
+\draw[-{Stealth}] (x) -- (proj);
+\node[box] (row) at (6.1,-0.75) {トークン固有\\[-2pt]\scriptsize $35 \times 256$};
+\draw[-{Stealth}] (pt) -- (row);
+\node[op] (sum) at (8.6,-0.75) {$+$};
+\node[font=\scriptsize, anchor=north] at (8.6,-1.0) {和 $\times 1/\sqrt{2}$};
+\draw[-{Stealth}] (row) -- (sum);
+\draw[-{Stealth}] (proj) -- (sum) node[midway, right, font=\scriptsize] {文脈成分};
+% the 35 slices
+\foreach \j/\lab in {0/1, 1/2, 2/3, 4/35} {
+  \node[draw, minimum width=0.55cm, minimum height=0.5cm, font=\scriptsize, inner sep=0pt] (e\j) at ({10.1+0.62*\j},-0.75) {$e_{\lab}$};
+}
+\node at ({10.1+0.62*3},-0.75) {$\cdots$};
+\draw[-{Stealth}] (sum) -- (e0);
+\draw[-{Stealth}] (x.north) -- ++(0,0.35) -| ({12.6},0.4) node[pos=0.75, right, font=\scriptsize, align=left] {第 1 層の\\入力 $h$};
+% ---------------- (b) inside decoder layer l
+\begin{scope}[yshift=-3.3cm]
+\node[font=\small\bfseries, anchor=west] at (-0.6,1.45) {(b) 第 $\ell$ 層の中で $e_\ell$ を混ぜる};
+\node (hin) at (-0.4,0) {$h$};
+\node[box] (att) at (1.0,0) {Attention};
+\node[box] (mlp) at (2.5,0) {MLP};
+\node[box] (gate) at (4.4,0) {gate\\[-2pt]\scriptsize $1536 \to 256$};
+\node[box] (act) at (6.0,0) {GELU};
+\node[op] (mul) at (7.2,0) {$\odot$};
+\node[box] (up) at (8.6,0) {projection\\[-2pt]\scriptsize $256 \to 1536$};
+\node[box] (nrm) at (10.75,0) {RMSNorm};
+\node[op] (res) at (12.1,0) {$+$};
+\node (hout) at (12.9,0) {$h'$};
+\draw[-{Stealth}] (hin) -- (att);
+\draw[-{Stealth}] (att) -- (mlp);
+\draw[-{Stealth}] (mlp) -- (gate);
+\draw[-{Stealth}] (gate) -- (act);
+\draw[-{Stealth}] (act) -- (mul);
+\draw[-{Stealth}] (mul) -- (up);
+\draw[-{Stealth}] (up) -- (nrm);
+\draw[-{Stealth}] (nrm) -- (res);
+\draw[-{Stealth}] (res) -- (hout);
+\node[draw, minimum width=0.55cm, minimum height=0.5cm, font=\scriptsize, inner sep=0pt] (el) at (7.2,1.0) {$e_\ell$};
+\draw[-{Stealth}] (el) -- (mul);
+\draw[-{Stealth}] (3.25,0) -- (3.25,-0.75) -| (res);
+\node[font=\scriptsize, above] at (5.2,-0.75) {residual};
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}] (3.55,-1.0) -- (12.3,-1.0)
+  node[midway, below=4pt, font=\scriptsize] {PLE ブロック（各層に約 0.8M パラメータ）};
+\end{scope}
+% ---------------- (c) memory traffic
+\node[draw, font=\scriptsize, align=left, anchor=north west] at (-0.6,-5.35)
+  {\textbf{decode 1 トークンで読むバイト}：PLE 表は全体で 4.7\,GB あるが，引くのは行 $t$ の $35 \times 256 \times 2\,\text{B} = 17.9$\,KB だけ．\\
+   本体の重み（3.8\,GB）や LM head（0.8\,GB）のように全体を毎ステップ読む必要はない．\\
+   $\Rightarrow$ 総 5.1B パラメータのうち，帯域を消費するのは約 2.3B 分だけになる．};
+\end{tikzpicture}

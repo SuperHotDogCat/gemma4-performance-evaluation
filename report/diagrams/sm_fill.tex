@@ -1,0 +1,37 @@
+% GPU execution model: (a) a 43-CTA GEMM leaves most of the 132 SMs empty,
+% (b) the global-layer Attention kernel launches 128 split-KV CTAs, but only split 0 gets KV blocks.
+\begin{tikzpicture}[font=\small]
+% (a) 132 SMs as a 12 x 11 grid, 43 of them busy
+\node[anchor=west, font=\small\bfseries] at (-0.1,0.55) {(a) E2B の GEMM：43 CTA，SM 132 個};
+\foreach \r in {0,...,10} {
+  \foreach \c in {0,...,11} {
+    \pgfmathtruncatemacro{\idx}{\r*12+\c}
+    \ifnum\idx<43
+      \fill[black!70] ({\c*0.36},{-\r*0.36}) rectangle ++(0.3,-0.3);
+    \else
+      \draw[black!45] ({\c*0.36},{-\r*0.36}) rectangle ++(0.3,-0.3);
+    \fi
+  }
+}
+\node[anchor=north west, font=\scriptsize, align=left] at (-0.1,-4.05)
+  {塗り：CTA が載った SM（43 個）\\白：仕事のない SM（89 個）\\$\Rightarrow$ 1 wave で終わり，SM の 2/3 が遊ぶ};
+% (b) split-KV decode of a global layer: 128 CTAs launched, only split 0 has KV blocks
+\begin{scope}[xshift=6.8cm]
+\node[anchor=west, font=\small\bfseries] at (-0.1,0.55) {(b) global 層の Attention：128 CTA};
+\foreach \r in {0,...,10} {
+  \foreach \c in {0,...,11} {
+    \pgfmathtruncatemacro{\idx}{\r*12+\c}
+    \ifnum\idx<1
+      \fill[black!85] ({\c*0.36},{-\r*0.36}) rectangle ++(0.3,-0.3);
+    \else\ifnum\idx<128
+      \fill[black!12] ({\c*0.36},{-\r*0.36}) rectangle ++(0.3,-0.3);
+      \draw[black!45] ({\c*0.36},{-\r*0.36}) rectangle ++(0.3,-0.3);
+    \else
+      \draw[black!45] ({\c*0.36},{-\r*0.36}) rectangle ++(0.3,-0.3);
+    \fi\fi
+  }
+}
+\node[anchor=north west, font=\scriptsize, align=left] at (-0.1,-4.05)
+  {黒：KV 全体（61\,MB）を 1 つで読む split 0\\灰：KV の範囲が空で，すぐ終わる split 1--127\\$\Rightarrow$ 実質 1 SM で動き，帯域は 1 SM 分（33\,GB/s）};
+\end{scope}
+\end{tikzpicture}

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[oc]
+.venv/
+
+# vLLM / torch / triton caches (see scripts/run_*.sh)
+.cache/
+
+# LaTeX build artifacts (report/main.pdf is kept)
+report/*.aux
+report/*.log
+report/*.fls
+report/*.fdb_latexmk
+report/*.out
+report/*.toc
+
+# Cheap to regenerate (scripts/prepare_workloads.py, scripts/analyze.py)
+data/workloads.json
+data/mtp_summary.csv
+data/spec_cost_model.csv
+
+# Runtime logs and profiler outputs written by the scripts
+logs/

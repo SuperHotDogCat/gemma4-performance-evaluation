@@ -1,0 +1,150 @@
+{
+ "span_ms": 1255.156349,
+ "gpu_busy_ms": 1153.338519,
+ "gpu_busy_frac": 0.9188803609358152,
+ "num_kernels": 160279,
+ "kernel_time_by_cat_frac": {
+  "gemm": 0.45773002257837075,
+  "moe": 0.2930316617688018,
+  "norm/elementwise": 0.12415422929897235,
+  "attention": 0.11586430092341603,
+  "sampling/logits": 0.005856906128585771,
+  "other": 0.0033628793018532503
+ },
+ "kernel_time_by_cat_ms": {
+  "other": 3.878542,
+  "norm/elementwise": 143.191994,
+  "sampling/logits": 6.755002,
+  "gemm": 527.918179,
+  "attention": 133.630891,
+  "moe": 337.965031
+ },
+ "top_kernels": [
+  {
+   "name": "fused_moe_kernel",
+   "ms": 285.705293,
+   "count": 15360,
+   "cat": "moe",
+   "avg_us": 18.600605013020836,
+   "avg_ctas": 280.5
+  },
+  {
+   "name": "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_TNT",
+   "ms": 129.888266,
+   "count": 15300,
+   "cat": "gemm",
+   "avg_us": 8.489429150326798,
+   "avg_ctas": 56.0
+  },
+  {
+   "name": "nvjet_sm90_tst_512x8_64x3_2x1_v_bz_TNT",
+   "ms": 107.043509,
+   "count": 256,
+   "cat": "gemm",
+   "avg_us": 418.13870703125,
+   "avg_ctas": 132.0
+  },
+  {
+   "name": "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_TNT",
+   "ms": 102.466624,
+   "count": 6375,
+   "cat": "gemm",
+   "avg_us": 16.073195921568626,
+   "avg_ctas": 128.0
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_sm90FlashAttentionForwardSm90_object_at__tensor000o211121021_tens",
+   "ms": 80.056293,
+   "count": 6400,
+   "cat": "attention",
+   "avg_us": 12.50879578125,
+   "avg_ctas": 127.53125
+  },
+  {
+   "name": "nvjet_sm90_tst_64x8_64x16_4x1_v_bz_splitK_TNT",
+   "ms": 59.77371,
+   "count": 6375,
+   "cat": "gemm",
+   "avg_us": 9.376268235294118,
+   "avg_ctas": 88.0
+  },
+  {
+   "name": "triton_red_fused_add_mul_rms_norm_2",
+   "ms": 53.491081,
+   "count": 7680,
+   "cat": "norm/elementwise",
+   "avg_us": 6.964984505208334,
+   "avg_ctas": 1.12109375
+  },
+  {
+   "name": "triton_red_fused_3",
+   "ms": 47.986404,
+   "count": 7424,
+   "cat": "norm/elementwise",
+   "avg_us": 6.463685883620689,
+   "avg_ctas": 3.046740301724138
+  },
+  {
+   "name": "triton_red_fused_add_moe_forward_mul_rms_norm_0",
+   "ms": 38.822094,
+   "count": 7680,
+   "cat": "moe",
+   "avg_us": 5.05496015625,
+   "avg_ctas": 1.12109375
+  },
+  {
+   "name": "nvjet_sm90_tss_64x8_64x16_2x1_v_bz_splitK_TNT",
+   "ms": 36.344811,
+   "count": 7650,
+   "cat": "gemm",
+   "avg_us": 4.7509556862745095,
+   "avg_ctas": 4.0
+  },
+  {
+   "name": "nvjet_sm90_tst_128x8_64x12_4x1_v_bz_TNT",
+   "ms": 24.747195,
+   "count": 1275,
+   "cat": "gemm",
+   "avg_us": 19.409564705882353,
+   "avg_ctas": 80.0
+  },
+  {
+   "name": "nvjet_sm90_tst_64x8_64x16_2x1_v_bz_splitK_TNT",
+   "ms": 21.684342,
+   "count": 1275,
+   "cat": "gemm",
+   "avg_us": 17.007327058823527,
+   "avg_ctas": 132.0
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_sm90FlashAttentionForwardSm90_object_at__tensor000o811121081_tens",
+   "ms": 21.649425,
+   "count": 1280,
+   "cat": "attention",
+   "avg_us": 16.91361328125,
+   "avg_ctas": 131.515625
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_combineFlashAttentionForwardCombine_object_at__tensorptrf32gmemal",
+   "ms": 19.14387,
+   "count": 7650,
+   "cat": "attention",
+   "avg_us": 2.502466666666667,
+   "avg_ctas": 4.666666666666667
+  },
+  {
+   "name": "_gemma4_routing_kernel",
+   "ms": 18.027145,
+   "count": 7680,
+   "cat": "gemm",
+   "avg_us": 2.3472845052083335,
+   "avg_ctas": 1.12109375
+  }
+ ],
+ "run": {
+  "wall_s": 1.2577344780002022,
+  "tokens": 256,
+  "batch": 1,
+  "tok_s": 203.5405759147511
+ }
+}

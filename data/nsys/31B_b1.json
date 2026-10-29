@@ -1,0 +1,148 @@
+{
+ "span_ms": 5572.704185,
+ "gpu_busy_ms": 5431.887356,
+ "gpu_busy_frac": 0.9747309700416118,
+ "num_kernels": 231899,
+ "kernel_time_by_cat_frac": {
+  "gemm": 0.8665561596791838,
+  "norm/elementwise": 0.07559278629981991,
+  "attention": 0.055893526245757844,
+  "sampling/logits": 0.0011882437150048347,
+  "other": 0.0007692840602336787
+ },
+ "kernel_time_by_cat_ms": {
+  "other": 4.178665,
+  "norm/elementwise": 410.611563,
+  "sampling/logits": 6.454407,
+  "gemm": 4707.036168,
+  "attention": 303.607385
+ },
+ "top_kernels": [
+  {
+   "name": "nvjet_sm90_tst_192x8_64x8_2x1_v_bz_TNT",
+   "ms": 2078.5521,
+   "count": 15300,
+   "cat": "gemm",
+   "avg_us": 135.85307843137255,
+   "avg_ctas": 132.0
+  },
+  {
+   "name": "nvjet_sm90_tst_128x8_64x12_2x1_v_bz_splitK_TNT",
+   "ms": 1518.926969,
+   "count": 30600,
+   "cat": "gemm",
+   "avg_us": 49.63813624183006,
+   "avg_ctas": 126.0
+  },
+  {
+   "name": "nvjet_sm90_tst_128x8_64x12_2x1_v_bz_TNT",
+   "ms": 654.077267,
+   "count": 12750,
+   "cat": "gemm",
+   "avg_us": 51.30017780392157,
+   "avg_ctas": 128.0
+  },
+  {
+   "name": "nvjet_sm90_tst_512x8_64x3_2x1_v_bz_TNT",
+   "ms": 203.620307,
+   "count": 256,
+   "cat": "gemm",
+   "avg_us": 795.39182421875,
+   "avg_ctas": 132.0
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_sm90FlashAttentionForwardSm90_object_at__tensor000o211121021_tens",
+   "ms": 184.021778,
+   "count": 12800,
+   "cat": "attention",
+   "avg_us": 14.37670140625,
+   "avg_ctas": 127.5625
+  },
+  {
+   "name": "nvjet_sm90_tst_256x8_64x6_4x1_v_bz_TNT",
+   "ms": 166.145384,
+   "count": 2550,
+   "cat": "gemm",
+   "avg_us": 65.15505254901962,
+   "avg_ctas": 80.0
+  },
+  {
+   "name": "triton_red_fused_add_mul_rms_norm_2",
+   "ms": 126.850487,
+   "count": 15360,
+   "cat": "norm/elementwise",
+   "avg_us": 8.258495247395834,
+   "avg_ctas": 1.12109375
+  },
+  {
+   "name": "triton_red_fused_add_rms_norm_0",
+   "ms": 123.484591,
+   "count": 15360,
+   "cat": "norm/elementwise",
+   "avg_us": 8.039361393229166,
+   "avg_ctas": 1.12109375
+  },
+  {
+   "name": "void cublasLt::splitKreduce_kernel<(int)32, (int)16, int, float, __nv_bfloat16, float, __nv_bfloat16, (bool)0, float, __",
+   "ms": 67.966692,
+   "count": 30720,
+   "cat": "gemm",
+   "avg_us": 2.212457421875,
+   "avg_ctas": 168.65625
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_sm90FlashAttentionForwardSm90_object_at__tensor000o811121081_tens",
+   "ms": 49.884014,
+   "count": 2560,
+   "cat": "attention",
+   "avg_us": 19.485942968750003,
+   "avg_ctas": 131.546875
+  },
+  {
+   "name": "kernel_cutlass_kernel_vllmvllm_flash_attncuteflash_fwd_combineFlashAttentionForwardCombine_object_at__tensorptrf32gmemal",
+   "ms": 42.605771,
+   "count": 15300,
+   "cat": "attention",
+   "avg_us": 2.7846909150326797,
+   "avg_ctas": 9.333333333333334
+  },
+  {
+   "name": "triton_red_fused_add_cat_index_select_mul_rms_norm_split_split_with_sizes_sub_unsqueeze_view_4",
+   "ms": 35.683153,
+   "count": 12544,
+   "cat": "norm/elementwise",
+   "avg_us": 2.8446391103316326,
+   "avg_ctas": 8.96875
+  },
+  {
+   "name": "triton_poi_fused_gelu_mul_slice_1",
+   "ms": 35.21194,
+   "count": 15360,
+   "cat": "norm/elementwise",
+   "avg_us": 2.2924440104166663,
+   "avg_ctas": 23.54296875
+  },
+  {
+   "name": "triton_red_fused_add_cat_index_select_mul_rms_norm_split_split_with_sizes_sub_unsqueeze_view_3",
+   "ms": 33.542253,
+   "count": 12544,
+   "cat": "norm/elementwise",
+   "avg_us": 2.6739678730867347,
+   "avg_ctas": 17.9375
+  },
+  {
+   "name": "triton_red_fused_3",
+   "ms": 29.945659,
+   "count": 2560,
+   "cat": "norm/elementwise",
+   "avg_us": 11.697523046875,
+   "avg_ctas": 3.06640625
+  }
+ ],
+ "run": {
+  "wall_s": 5.575630759005435,
+  "tokens": 256,
+  "batch": 1,
+  "tok_s": 45.91408776245157
+ }
+}

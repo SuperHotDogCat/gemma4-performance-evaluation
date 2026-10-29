@@ -1,0 +1,53 @@
+% KV sharing in E2B: layers 16-35 have no K/V projection and read the KV cache of
+% the last non-shared layer of the same type (local: layer 14, global: layer 15).
+\begin{tikzpicture}[font=\small]
+\def\w{0.36}   % pitch per layer
+\def\bw{0.30}  % layer box width
+% layer boxes (1-indexed); global every 5th layer
+\foreach \i in {1,...,35} {
+  \pgfmathtruncatemacro{\isg}{mod(\i,5)==0 ? 1 : 0}
+  \pgfmathtruncatemacro{\issh}{\i > 15 ? 1 : 0}
+  \ifnum\isg=1
+    \fill[black] ({(\i-1)*\w},0) rectangle ++(\bw,0.6);
+  \else
+    \ifnum\issh=1
+      \draw[pattern=north east lines] ({(\i-1)*\w},0) rectangle ++(\bw,0.6);
+    \else
+      \draw[fill=white] ({(\i-1)*\w},0) rectangle ++(\bw,0.6);
+    \fi
+  \fi
+}
+\foreach \i in {1,5,10,14,15,20,25,30,35} {
+  \node[font=\tiny, above] at ({(\i-1)*\w+\bw/2},0.6) {\i};
+}
+% region braces
+\draw[decorate, decoration={brace, amplitude=4pt}] (0,1.0) -- ({15*\w-0.06},1.0)
+  node[midway, above=4pt, font=\scriptsize, align=center] {KV を自分で作る層（1--15）\\K/V projectionあり，KV キャッシュに書き込む};
+\draw[decorate, decoration={brace, amplitude=4pt}] ({15*\w},1.0) -- ({35*\w-0.06},1.0)
+  node[midway, above=4pt, font=\scriptsize, align=center] {KV 共有層（16--35）\\K/V projectionなし，query だけ計算};
+% the two KV caches that are stored
+\node[draw, fill=white, font=\scriptsize, align=center, minimum width=2.1cm] (kvl) at ({13*\w+\bw/2-1.2},-1.0) {local KV\\（第 14 層）};
+\node[draw, fill=black!70, text=white, font=\scriptsize, align=center, minimum width=2.1cm] (kvg) at ({14*\w+\bw/2-0.6},-2.1) {global KV\\（第 15 層）};
+\draw[-{Stealth}] ({13*\w+\bw/2},0) -- (kvl.north -| {13*\w+\bw/2},0) node[pos=0.5, right, font=\tiny] {書込};
+\draw[-{Stealth}] ({14*\w+\bw/2},0) -- (kvg.north -| {14*\w+\bw/2},0);
+% bus lines: local cache -> shared local layers, global cache -> shared global layers
+\draw[thick] (kvl.east) -- ({34*\w+\bw/2},-1.0);
+\foreach \i in {16,...,35} {
+  \pgfmathtruncatemacro{\isg}{mod(\i,5)==0 ? 1 : 0}
+  \ifnum\isg=0
+    \draw[-{Stealth}] ({(\i-1)*\w+\bw/2},-1.0) -- ({(\i-1)*\w+\bw/2},-0.03);
+    \fill ({(\i-1)*\w+\bw/2},-1.0) circle (1pt);
+  \fi
+}
+\draw[thick, densely dashed] (kvg.east) -- ({34*\w+\bw/2},-2.1);
+\foreach \i in {20,25,30,35} {
+  \draw[-{Stealth}, densely dashed] ({(\i-1)*\w+\bw/2},-2.1) -- ({(\i-1)*\w+\bw/2},-0.03);
+  \fill ({(\i-1)*\w+\bw/2},-2.1) circle (1pt);
+}
+\node[font=\scriptsize, anchor=west] at ({35*\w+0.05},-1.0) {読出（local 16 層）};
+\node[font=\scriptsize, anchor=west] at ({35*\w+0.05},-2.1) {読出（global 4 層）};
+% effect
+\node[draw, font=\scriptsize, align=left, anchor=north west] at (0,-2.75)
+  {32k トークン 1 リクエストの KV（E2B）：\quad \textbf{格納} 198\,MiB（共有なしなら 462\,MiB）\quad
+   \textbf{1 ステップの読み出し} 462\,MiB（共有しても変わらない）};
+\end{tikzpicture}

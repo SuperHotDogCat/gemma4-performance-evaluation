@@ -1,0 +1,36 @@
+% 26B-A4B MoE block (left) and fraction of experts touched by a batch of B tokens (right)
+\begin{tikzpicture}[font=\small, box/.style={draw, align=center, inner sep=3pt}]
+\begin{scope}
+  \node[box] (x) at (0,0) {$x$};
+  \node[box] (r) at (1.4,0.9) {router};
+  \node[font=\tiny, align=center, anchor=north] at (1.4,0.55) {softmax→top-8\\→renormalize};
+  % 128 experts drawn as 16 small boxes (each = 8 experts), 8 chosen ones highlighted
+  \foreach \e in {0,...,15} {
+    \pgfmathtruncatemacro{\sel}{(\e==1)||(\e==4)||(\e==5)||(\e==9)||(\e==13) ? 1 : 0}
+    \ifnum\sel=1 \def\fc{black!70}\else\def\fc{white}\fi
+    \draw[fill=\fc] ({2.6+0.22*\e},0.75) rectangle ++(0.18,0.3);
+  }
+  \node[font=\scriptsize, above] at (4.3,1.05) {routed expert 128 個から top-8（中間次元 704）};
+  \node[box, minimum width=3.5cm] (d) at (4.3,-0.6) {dense MLP（中間次元 2112，常に通る）};
+  \node[font=\tiny, anchor=north] at (4.3,-0.98) {2 つの出力はそれぞれ RMSNorm をかけてから足す};
+  \node[draw, circle, inner sep=1pt] (s) at (7.3,0.2) {$+$};
+  \draw[-{Stealth}] (x) |- (r);
+  \draw[-{Stealth}] (r) -- (2.55,0.9);
+  \draw[-{Stealth}] (x) |- (d);
+  \draw[-{Stealth}] (6.15,0.9) -| (s);
+  \draw[-{Stealth}] (d) -| (s);
+  \draw[-{Stealth}] (s) -- ++(0.6,0);
+\end{scope}
+\begin{scope}[xshift=9.0cm, yshift=-1.3cm]
+\begin{axis}[width=5.6cm, height=4.0cm, xmode=log, log basis x=2,
+  xmin=1, xmax=128, ymin=0, ymax=1, xtick={1,4,16,64}, xticklabels={1,4,16,64},
+  xlabel={バッチ内トークン数 $B$}, ylabel={読む expert の割合}, font=\scriptsize,
+  grid=major, grid style={black!12}, axis x line*=bottom, axis y line*=left]
+\addplot[black, thick, domain=1:128, samples=60] {1-(1-8/128)^x};
+\addplot[only marks, mark=*, mark size=1.5pt] coordinates {(1,0.0625) (16,0.643) (64,0.984)};
+\node[anchor=west, font=\tiny] at (axis cs:1.3,0.20) {6\%};
+\node[anchor=west, font=\tiny] at (axis cs:17,0.58) {64\%};
+\node[anchor=north, font=\tiny] at (axis cs:64,0.93) {98\%};
+\end{axis}
+\end{scope}
+\end{tikzpicture}

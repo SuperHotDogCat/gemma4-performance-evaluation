@@ -1,0 +1,22 @@
+% Gemma 4 family: total text parameters vs. parameters read per decoded token
+\begin{tikzpicture}
+\begin{axis}[
+  xbar, bar width=7pt, width=0.82\linewidth, height=5.2cm,
+  xmin=0, xmax=36, xlabel={パラメータ数 [B]},
+  symbolic y coords={31B,26B-A4B,12B,E4B,E2B}, ytick=data, y dir=reverse,
+  yticklabel style={font=\small},
+  enlarge y limits=0.15, axis x line*=bottom, axis y line*=left,
+  legend style={draw=none, at={(0.98,0.04)}, anchor=south east, font=\footnotesize, cells={anchor=west}},
+  nodes near coords align={horizontal},
+]
+% total (text tower) parameters, hollow
+\addplot+[bar shift=0pt, draw=black, fill=white, pattern=north east lines,
+          nodes near coords={\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}},
+          every node near coord/.append style={font=\scriptsize, black}]
+  coordinates {(4.6,E2B) (7.5,E4B) (11.9,12B) (25.2,26B-A4B) (30.7,31B)};
+% parameters touched per token in decode, solid
+\addplot+[bar shift=0pt, draw=black, fill=black!75]
+  coordinates {(2.3,E2B) (4.7,E4B) (11.9,12B) (3.8,26B-A4B) (30.7,31B)};
+\legend{総パラメータ（テキスト部）, 1 トークンの decode で読むパラメータ}
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,44 @@
+{
+ "E2B": {
+  "kv_pool_gib": 74.17,
+  "kv_cache_tokens": 7096320,
+  "max_model_len": 40960,
+  "max_concurrency": 173.25
+ },
+ "E4B": {
+  "kv_pool_gib": 68.82,
+  "kv_cache_tokens": 2218245,
+  "max_model_len": 40960,
+  "max_concurrency": 54.16
+ },
+ "12B": {
+  "kv_pool_gib": 60.99,
+  "kv_cache_tokens": 420403,
+  "max_model_len": 40960,
+  "max_concurrency": 10.26
+ },
+ "26B_A4B": {
+  "kv_pool_gib": 35.15,
+  "kv_cache_tokens": 350739,
+  "max_model_len": 40960,
+  "max_concurrency": 8.56
+ },
+ "31B": {
+  "kv_pool_gib": 27.04,
+  "kv_cache_tokens": 59026,
+  "max_model_len": 34816,
+  "max_concurrency": 1.7
+ },
+ "Qwen3_30B_A3B": {
+  "kv_pool_gib": 27.08,
+  "kv_cache_tokens": 295776,
+  "max_model_len": 40960,
+  "max_concurrency": 7.22
+ },
+ "Qwen3_32B": {
+  "kv_pool_gib": 24.8,
+  "kv_cache_tokens": 101584,
+  "max_model_len": 40960,
+  "max_concurrency": 2.48
+ }
+}

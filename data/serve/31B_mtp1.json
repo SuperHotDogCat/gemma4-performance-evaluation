@@ -1,0 +1,2361 @@
+{
+ "tag": "31B_mtp1",
+ "model": "google/gemma-4-31B-it",
+ "draft_model": "google/gemma-4-31B-it-assistant",
+ "spec_method": "mtp",
+ "num_speculative_tokens": 1,
+ "max_model_len": 34816,
+ "gpu_mem_util": 0.95,
+ "startup_s": 126.15471577644348,
+ "latency": [
+  {
+   "prompt_tokens": 336,
+   "output_tokens": 128,
+   "ttft_s": 0.07183575900126016,
+   "e2e_s": 1.639050400997803,
+   "decode_s": 1.567127182999684,
+   "tpot_s": 0.012339584118107748,
+   "n_chunks": 69,
+   "itl_median_s": 0.02295402500021737,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase (generating tokens one by one) is fundamentally different from the \"prefill\" phase (processing the initial prompt). While prefill is typically **compute-bound** (limited by TFLOPS), decoding is almost always **memory-bandwidth-bound**. This means the GPU spends m",
+   "workload_id": "syn_in256_out128",
+   "kind": "synthetic",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.8676470588235294,
+    "mean_acceptance_length": 1.8676470588235294,
+    "acc_per_pos": [
+     0.8676470588235294
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 336,
+   "output_tokens": 128,
+   "ttft_s": 0.0669984080013819,
+   "e2e_s": 1.6308699369983515,
+   "decode_s": 1.5637850990024162,
+   "tpot_s": 0.012313268496082018,
+   "n_chunks": 69,
+   "itl_median_s": 0.02290069599985145,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase (generating tokens one by one) is fundamentally different from the \"prefill\" phase (processing the initial prompt). While prefill is typically **compute-bound** (limited by TFLOPS), decoding is almost always **memory-bandwidth-bound**. This means the GPU spends m",
+   "workload_id": "syn_in256_out128",
+   "kind": "synthetic",
+   "repeat": 1,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.8676470588235294,
+    "mean_acceptance_length": 1.8676470588235294,
+    "acc_per_pos": [
+     0.8676470588235294
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 336,
+   "output_tokens": 128,
+   "ttft_s": 0.06678353899769718,
+   "e2e_s": 1.6343371319962898,
+   "decode_s": 1.5674658540010569,
+   "tpot_s": 0.01234225081890596,
+   "n_chunks": 69,
+   "itl_median_s": 0.022911504995136056,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase (generating tokens one by one) is fundamentally different from the \"prefill\" phase (processing the initial prompt). While prefill is typically **compute-bound** (limited by TFLOPS), decoding is almost always **memory-bandwidth-bound**. This means the GPU spends m",
+   "workload_id": "syn_in256_out128",
+   "kind": "synthetic",
+   "repeat": 2,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.8676470588235294,
+    "mean_acceptance_length": 1.8676470588235294,
+    "acc_per_pos": [
+     0.8676470588235294
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 661,
+   "output_tokens": 128,
+   "ttft_s": 0.11251133000041591,
+   "e2e_s": 1.7208062350036926,
+   "decode_s": 1.608207865996519,
+   "tpot_s": 0.012663054062964717,
+   "n_chunks": 69,
+   "itl_median_s": 0.02353728199523175,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase (generating tokens one by one) is fundamentally different from the \"prefill\" phase (processing the initial prompt). While prefill is typically **compute-bound** (limited by TFLOPS), decoding is almost always **memory-bandwidth-bound**. This means the GPU spends m",
+   "workload_id": "syn_in512_out128",
+   "kind": "synthetic",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.8676470588235294,
+    "mean_acceptance_length": 1.8676470588235294,
+    "acc_per_pos": [
+     0.8676470588235294
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 661,
+   "output_tokens": 128,
+   "ttft_s": 0.11472265799966408,
+   "e2e_s": 1.7255231879971689,
+   "decode_s": 1.6107060499998624,
+   "tpot_s": 0.012682724803148523,
+   "n_chunks": 69,
+   "itl_median_s": 0.023510712002462242,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase (generating tokens one by one) is fundamentally different from the \"prefill\" phase (processing the initial prompt). While prefill is typically **compute-bound** (limited by TFLOPS), decoding is almost always **memory-bandwidth-bound**. This means the GPU spends m",
+   "workload_id": "syn_in512_out128",
+   "kind": "synthetic",
+   "repeat": 1,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.8676470588235294,
+    "mean_acceptance_length": 1.8676470588235294,
+    "acc_per_pos": [
+     0.8676470588235294
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 661,
+   "output_tokens": 128,
+   "ttft_s": 0.1084779550001258,
+   "e2e_s": 1.722016548999818,
+   "decode_s": 1.613451964003616,
+   "tpot_s": 0.012704346173256819,
+   "n_chunks": 69,
+   "itl_median_s": 0.023555792002298404,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase (generating tokens one by one) is fundamentally different from the \"prefill\" phase (processing the initial prompt). While prefill is typically **compute-bound** (limited by TFLOPS), decoding is almost always **memory-bandwidth-bound**. This means the GPU spends m",
+   "workload_id": "syn_in512_out128",
+   "kind": "synthetic",
+   "repeat": 2,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.8676470588235294,
+    "mean_acceptance_length": 1.8676470588235294,
+    "acc_per_pos": [
+     0.8676470588235294
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1311,
+   "output_tokens": 128,
+   "ttft_s": 0.20813181499397615,
+   "e2e_s": 1.8763963489982416,
+   "decode_s": 1.6681570340006147,
+   "tpot_s": 0.013135094755910352,
+   "n_chunks": 69,
+   "itl_median_s": 0.024374847998842597,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nLarge Language Model (LLM) inference is divided into two distinct phases: the **prefill phase** (processing the input prompt) and the **decoding phase** (generating tokens one by one). While the prefill phase is typically compute-bound (utilizing the GPU's TFLOPS), the decoding phase is almost always **memory-bandwidth-bound**.\n\nT",
+   "workload_id": "syn_in1024_out128",
+   "kind": "synthetic",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 60.0,
+    "acceptance_rate": 0.8823529411764706,
+    "mean_acceptance_length": 1.8823529411764706,
+    "acc_per_pos": [
+     0.8823529411764706
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1311,
+   "output_tokens": 128,
+   "ttft_s": 0.18926296900463058,
+   "e2e_s": 1.8582201680037542,
+   "decode_s": 1.6688570900005288,
+   "tpot_s": 0.01314060700787818,
+   "n_chunks": 69,
+   "itl_median_s": 0.02439532800053712,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nLarge Language Model (LLM) inference is divided into two distinct phases: the **prefill phase** (processing the input prompt) and the **decoding phase** (generating tokens one by one). While the prefill phase is typically compute-bound (utilizing the GPU's TFLOPS), the decoding phase is almost always **memory-bandwidth-bound**.\n\nT",
+   "workload_id": "syn_in1024_out128",
+   "kind": "synthetic",
+   "repeat": 1,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 60.0,
+    "acceptance_rate": 0.8823529411764706,
+    "mean_acceptance_length": 1.8823529411764706,
+    "acc_per_pos": [
+     0.8823529411764706
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1311,
+   "output_tokens": 128,
+   "ttft_s": 0.19115202799730469,
+   "e2e_s": 1.861721546993067,
+   "decode_s": 1.6704692999992403,
+   "tpot_s": 0.013153301574797167,
+   "n_chunks": 69,
+   "itl_median_s": 0.024383568001212552,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nLarge Language Model (LLM) inference is divided into two distinct phases: the **prefill phase** (processing the input prompt) and the **decoding phase** (generating tokens one by one). While the prefill phase is typically compute-bound (utilizing the GPU's TFLOPS), the decoding phase is almost always **memory-bandwidth-bound**.\n\nT",
+   "workload_id": "syn_in1024_out128",
+   "kind": "synthetic",
+   "repeat": 2,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 60.0,
+    "acceptance_rate": 0.8823529411764706,
+    "mean_acceptance_length": 1.8823529411764706,
+    "acc_per_pos": [
+     0.8823529411764706
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 2586,
+   "output_tokens": 128,
+   "ttft_s": 0.380291806999594,
+   "e2e_s": 2.1293981799972244,
+   "decode_s": 1.7490055029993528,
+   "tpot_s": 0.013771696874010652,
+   "n_chunks": 70,
+   "itl_median_s": 0.0251960230016266,
+   "text": "To understand why Large Language Model (LLM) decoding is typically **memory-bandwidth-bound** rather than **compute-bound**, we must examine the operational mechanics of the autoregressive decoding process.\n\n### 1. The Nature of Autoregressive Decoding\nUnlike the \"prefill\" phase (where the model processes the entire input prompt in parallel), the **decoding phase** generates tokens one by one. To ",
+   "workload_id": "syn_in2048_out128",
+   "kind": "synthetic",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 58.0,
+    "acceptance_rate": 0.8405797101449275,
+    "mean_acceptance_length": 1.8405797101449275,
+    "acc_per_pos": [
+     0.8405797101449275
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 2586,
+   "output_tokens": 128,
+   "ttft_s": 0.39940732499962905,
+   "e2e_s": 2.147573533002287,
+   "decode_s": 1.7480709290030063,
+   "tpot_s": 0.013764338023645718,
+   "n_chunks": 70,
+   "itl_median_s": 0.025191093001922127,
+   "text": "To understand why Large Language Model (LLM) decoding is typically **memory-bandwidth-bound** rather than **compute-bound**, we must examine the operational mechanics of the autoregressive decoding process.\n\n### 1. The Nature of Autoregressive Decoding\nUnlike the \"prefill\" phase (where the model processes the entire input prompt in parallel), the **decoding phase** generates tokens one by one. To ",
+   "workload_id": "syn_in2048_out128",
+   "kind": "synthetic",
+   "repeat": 1,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 58.0,
+    "acceptance_rate": 0.8405797101449275,
+    "mean_acceptance_length": 1.8405797101449275,
+    "acc_per_pos": [
+     0.8405797101449275
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 2586,
+   "output_tokens": 128,
+   "ttft_s": 0.3973939290008275,
+   "e2e_s": 2.1446932879989618,
+   "decode_s": 1.7472102390020154,
+   "tpot_s": 0.013757560937023744,
+   "n_chunks": 70,
+   "itl_median_s": 0.02519027300149901,
+   "text": "To understand why Large Language Model (LLM) decoding is typically **memory-bandwidth-bound** rather than **compute-bound**, we must examine the operational mechanics of the autoregressive decoding process.\n\n### 1. The Nature of Autoregressive Decoding\nUnlike the \"prefill\" phase (where the model processes the entire input prompt in parallel), the **decoding phase** generates tokens one by one. To ",
+   "workload_id": "syn_in2048_out128",
+   "kind": "synthetic",
+   "repeat": 2,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 58.0,
+    "acceptance_rate": 0.8405797101449275,
+    "mean_acceptance_length": 1.8405797101449275,
+    "acc_per_pos": [
+     0.8405797101449275
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 5136,
+   "output_tokens": 128,
+   "ttft_s": 0.8058593250025297,
+   "e2e_s": 2.675266329999431,
+   "decode_s": 1.8693206049938453,
+   "tpot_s": 0.014719059881841303,
+   "n_chunks": 70,
+   "itl_median_s": 0.02687729400349781,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. While the initial \"prefill\" phase (processing the input prompt) is typically **compute-bound** (limited by the TFLOPS of the GPU), the generation of subsequent tokens is almost always **memory-bandwidth-bound**.\n",
+   "workload_id": "syn_in4096_out128",
+   "kind": "synthetic",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.855072463768116,
+    "mean_acceptance_length": 1.855072463768116,
+    "acc_per_pos": [
+     0.855072463768116
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 5136,
+   "output_tokens": 128,
+   "ttft_s": 0.7744384090037784,
+   "e2e_s": 2.6453042140055913,
+   "decode_s": 1.8707586160016945,
+   "tpot_s": 0.014730382803162948,
+   "n_chunks": 70,
+   "itl_median_s": 0.026879552999162115,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. While the initial \"prefill\" phase (processing the input prompt) is typically **compute-bound** (limited by the TFLOPS of the GPU), the generation of subsequent tokens is almost always **memory-bandwidth-bound**.\n",
+   "workload_id": "syn_in4096_out128",
+   "kind": "synthetic",
+   "repeat": 1,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.855072463768116,
+    "mean_acceptance_length": 1.855072463768116,
+    "acc_per_pos": [
+     0.855072463768116
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 5136,
+   "output_tokens": 128,
+   "ttft_s": 0.7692347769989283,
+   "e2e_s": 2.6390875859942753,
+   "decode_s": 1.8697406599967508,
+   "tpot_s": 0.01472236740154922,
+   "n_chunks": 70,
+   "itl_median_s": 0.02686197299772175,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. While the initial \"prefill\" phase (processing the input prompt) is typically **compute-bound** (limited by the TFLOPS of the GPU), the generation of subsequent tokens is almost always **memory-bandwidth-bound**.\n",
+   "workload_id": "syn_in4096_out128",
+   "kind": "synthetic",
+   "repeat": 2,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.855072463768116,
+    "mean_acceptance_length": 1.855072463768116,
+    "acc_per_pos": [
+     0.855072463768116
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 10261,
+   "output_tokens": 128,
+   "ttft_s": 1.6801476079999702,
+   "e2e_s": 3.757484547000786,
+   "decode_s": 2.0772398990011425,
+   "tpot_s": 0.01635621967717435,
+   "n_chunks": 70,
+   "itl_median_s": 0.030280312996183056,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. While the initial \"prefill\" phase (processing the input prompt) is typically **compute-bound** (limited by the TFLOPS of the GPU), the generation of subsequent tokens is almost always **memory-bandwidth-bound**.\n",
+   "workload_id": "syn_in8192_out128",
+   "kind": "synthetic",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.855072463768116,
+    "mean_acceptance_length": 1.855072463768116,
+    "acc_per_pos": [
+     0.855072463768116
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 10261,
+   "output_tokens": 128,
+   "ttft_s": 1.6434454569971422,
+   "e2e_s": 3.7424388009967515,
+   "decode_s": 2.098863514002005,
+   "tpot_s": 0.01652648436222051,
+   "n_chunks": 70,
+   "itl_median_s": 0.03026496100210352,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. While the initial \"prefill\" phase (processing the input prompt) is typically **compute-bound** (limited by the TFLOPS of the GPU), the generation of subsequent tokens is almost always **memory-bandwidth-bound**.\n",
+   "workload_id": "syn_in8192_out128",
+   "kind": "synthetic",
+   "repeat": 1,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.855072463768116,
+    "mean_acceptance_length": 1.855072463768116,
+    "acc_per_pos": [
+     0.855072463768116
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 10261,
+   "output_tokens": 128,
+   "ttft_s": 1.6610491450046538,
+   "e2e_s": 3.7601033130049473,
+   "decode_s": 2.09894433899899,
+   "tpot_s": 0.016527120779519608,
+   "n_chunks": 70,
+   "itl_median_s": 0.030272162999608554,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. While the initial \"prefill\" phase (processing the input prompt) is typically **compute-bound** (limited by the TFLOPS of the GPU), the generation of subsequent tokens is almost always **memory-bandwidth-bound**.\n",
+   "workload_id": "syn_in8192_out128",
+   "kind": "synthetic",
+   "repeat": 2,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.855072463768116,
+    "mean_acceptance_length": 1.855072463768116,
+    "acc_per_pos": [
+     0.855072463768116
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 20511,
+   "output_tokens": 128,
+   "ttft_s": 3.673414862001664,
+   "e2e_s": 6.226635505001468,
+   "decode_s": 2.553111663997697,
+   "tpot_s": 0.020103241448800765,
+   "n_chunks": 70,
+   "itl_median_s": 0.037015374000475276,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. Unlike the \"prefill\" phase (where the entire input prompt is processed in parallel), decoding happens one token at a time. This fundamental difference shifts the primary performance bottleneck from **compute-boun",
+   "workload_id": "syn_in16384_out128",
+   "kind": "synthetic",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 58.0,
+    "acceptance_rate": 0.8405797101449275,
+    "mean_acceptance_length": 1.8405797101449275,
+    "acc_per_pos": [
+     0.8405797101449275
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 20511,
+   "output_tokens": 128,
+   "ttft_s": 3.6595233820044086,
+   "e2e_s": 6.22820534400671,
+   "decode_s": 2.5685711830010405,
+   "tpot_s": 0.020224969944890082,
+   "n_chunks": 70,
+   "itl_median_s": 0.036943455997970887,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. Unlike the \"prefill\" phase (where the entire input prompt is processed in parallel), decoding happens one token at a time. This fundamental difference shifts the primary performance bottleneck from **compute-boun",
+   "workload_id": "syn_in16384_out128",
+   "kind": "synthetic",
+   "repeat": 1,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 58.0,
+    "acceptance_rate": 0.8405797101449275,
+    "mean_acceptance_length": 1.8405797101449275,
+    "acc_per_pos": [
+     0.8405797101449275
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 20511,
+   "output_tokens": 128,
+   "ttft_s": 3.680576014005055,
+   "e2e_s": 6.249736295998446,
+   "decode_s": 2.569049682999321,
+   "tpot_s": 0.020228737661411974,
+   "n_chunks": 70,
+   "itl_median_s": 0.036929665999196004,
+   "text": "### Technical Explanation: GPU Memory-Bandwidth-Bound LLM Decoding\n\nIn the context of Large Language Models (LLMs), the \"decoding\" phase refers to the autoregressive generation of tokens. Unlike the \"prefill\" phase (where the entire input prompt is processed in parallel), decoding happens one token at a time. This fundamental difference shifts the primary performance bottleneck from **compute-boun",
+   "workload_id": "syn_in16384_out128",
+   "kind": "synthetic",
+   "repeat": 2,
+   "force_len": true,
+   "genre": null,
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 58.0,
+    "acceptance_rate": 0.8405797101449275,
+    "mean_acceptance_length": 1.8405797101449275,
+    "acc_per_pos": [
+     0.8405797101449275
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 718,
+   "output_tokens": 128,
+   "ttft_s": 0.14920580200123368,
+   "e2e_s": 1.6930237359993043,
+   "decode_s": 1.5437232650001533,
+   "tpot_s": 0.012155301299213805,
+   "n_chunks": 66,
+   "itl_median_s": 0.023684493004111573,
+   "text": "the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathro",
+   "workload_id": "bab_1k_qa1_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "1k",
+   "qa_split": "qa1",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 63.0,
+    "acceptance_rate": 0.9692307692307692,
+    "mean_acceptance_length": 1.9692307692307693,
+    "acc_per_pos": [
+     0.9692307692307692
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 685,
+   "output_tokens": 128,
+   "ttft_s": 0.131183596997289,
+   "e2e_s": 1.73339131600369,
+   "decode_s": 1.602119680006581,
+   "tpot_s": 0.012615115590602998,
+   "n_chunks": 67,
+   "itl_median_s": 0.024145529998349957,
+   "text": "In the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought",
+   "workload_id": "bab_1k_qa1_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "1k",
+   "qa_split": "qa1",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 60.0,
+    "acceptance_rate": 0.8955223880597015,
+    "mean_acceptance_length": 1.8955223880597014,
+    "acc_per_pos": [
+     0.8955223880597015
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 726,
+   "output_tokens": 128,
+   "ttft_s": 0.13306548700347776,
+   "e2e_s": 1.9026679180024075,
+   "decode_s": 1.7695151309962966,
+   "tpot_s": 0.013933190007844855,
+   "n_chunks": 74,
+   "itl_median_s": 0.024175239996111486,
+   "text": "There (with Daniel)of course, the text says \"Daniel grabbed the football there.\" However, the text does not specify a location. Based on the last action, Daniel has it. Or, more simply: **Not specified**. Or, if referring to the last action: **With Daniel**.\n\nWait, looking closer at the text: \"Daniel took the football there,\" \"Daniel dropped the football,\" \"Daniel grabbed the football there.\" The ",
+   "workload_id": "bab_1k_qa2_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "1k",
+   "qa_split": "qa2",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 73.0,
+    "num_draft_tokens": 73.0,
+    "num_accepted": 54.0,
+    "acceptance_rate": 0.7397260273972602,
+    "mean_acceptance_length": 1.7397260273972601,
+    "acc_per_pos": [
+     0.7397260273972602
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 705,
+   "output_tokens": 128,
+   "ttft_s": 0.12442316699889489,
+   "e2e_s": 1.7214944179941085,
+   "decode_s": 1.5969818209996447,
+   "tpot_s": 0.012574660007871217,
+   "n_chunks": 66,
+   "itl_median_s": 0.024085149001621176,
+   "text": "the gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\nthe gardenof\nthought\n",
+   "workload_id": "bab_1k_qa2_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "1k",
+   "qa_split": "qa2",
+   "target": "garden",
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9242424242424242,
+    "mean_acceptance_length": 1.9242424242424243,
+    "acc_per_pos": [
+     0.9242424242424242
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 586,
+   "output_tokens": 128,
+   "ttft_s": 0.12977977099944837,
+   "e2e_s": 1.8617761629939196,
+   "decode_s": 1.731910712995159,
+   "tpot_s": 0.01363709222830834,
+   "n_chunks": 74,
+   "itl_median_s": 0.023822741000913084,
+   "text": "the bathroomof the bathroom (or simply \"the bathroom\")\n\n*Correction based on the text sequence:*\nThe football was last held by Mary, who got it in the **bathroom** before moving to the kitchen, then the garden.\n\nAnswer: **the bathroom**** (or **the kitchen**)\n\n*Refining based on the final movements:*\n1. John dropped it (location not specified, but previous context was the bathroom).\n2. Sandra got ",
+   "workload_id": "bab_1k_qa3_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "1k",
+   "qa_split": "qa3",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 73.0,
+    "num_draft_tokens": 73.0,
+    "num_accepted": 54.0,
+    "acceptance_rate": 0.7397260273972602,
+    "mean_acceptance_length": 1.7397260273972601,
+    "acc_per_pos": [
+     0.7397260273972602
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 735,
+   "output_tokens": 128,
+   "ttft_s": 0.1346120130037889,
+   "e2e_s": 1.976122309002676,
+   "decode_s": 1.8414052869993611,
+   "tpot_s": 0.014499254228341427,
+   "n_chunks": 77,
+   "itl_median_s": 0.02409605900174938,
+   "text": "the gardenof the garden (or simply \"the garden\")\n\n*Correction based on text sequence:*\nThe football was in the **garden** (Daniel journeyed to the garden, then later Daniel left the football there before moving to the bathroom/hallway). However, looking at the very first movements: John took the football, then John travelled to the hallway. Before that, the text does not specify a location for the",
+   "workload_id": "bab_1k_qa3_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "1k",
+   "qa_split": "qa3",
+   "target": "garden",
+   "spec": {
+    "num_drafts": 76.0,
+    "num_draft_tokens": 76.0,
+    "num_accepted": 52.0,
+    "acceptance_rate": 0.6842105263157895,
+    "mean_acceptance_length": 1.6842105263157894,
+    "acc_per_pos": [
+     0.6842105263157895
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1679,
+   "output_tokens": 128,
+   "ttft_s": 0.2841871179989539,
+   "e2e_s": 1.8951422379977885,
+   "decode_s": 1.6108689199973014,
+   "tpot_s": 0.01268400724407324,
+   "n_chunks": 66,
+   "itl_median_s": 0.024831484995957,
+   "text": "the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathroomof the bathro",
+   "workload_id": "bab_2k_qa1_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "2k",
+   "qa_split": "qa1",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 63.0,
+    "acceptance_rate": 0.9692307692307692,
+    "mean_acceptance_length": 1.9692307692307693,
+    "acc_per_pos": [
+     0.9692307692307692
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1715,
+   "output_tokens": 128,
+   "ttft_s": 0.2871149409984355,
+   "e2e_s": 1.951470475003589,
+   "decode_s": 1.6642686949999188,
+   "tpot_s": 0.013104477913385187,
+   "n_chunks": 67,
+   "itl_median_s": 0.024878725002054125,
+   "text": "In the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought",
+   "workload_id": "bab_2k_qa1_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "2k",
+   "qa_split": "qa1",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9104477611940298,
+    "mean_acceptance_length": 1.9104477611940298,
+    "acc_per_pos": [
+     0.9104477611940298
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1558,
+   "output_tokens": 128,
+   "ttft_s": 0.264039744004549,
+   "e2e_s": 1.922621457000787,
+   "decode_s": 1.6584716829966055,
+   "tpot_s": 0.01305883214957957,
+   "n_chunks": 68,
+   "itl_median_s": 0.024807784997392446,
+   "text": "In the kitchen.of the kitchen. (Wait, the text says \"Daniel grabbed the football there\" after \"Daniel went to the kitchen.\")\n\nCorrect answer: In the kitchen.of the kitchen. (Wait, the text says \"Daniel grabbed the football there\" after \"Daniel went to the kitchen.\")\n\nCorrect answer: In the kitchen.of the kitchen. (Wait, the text says \"Daniel grabbed the football there\" after \"Daniel went to the ki",
+   "workload_id": "bab_2k_qa2_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "2k",
+   "qa_split": "qa2",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 60.0,
+    "acceptance_rate": 0.8955223880597015,
+    "mean_acceptance_length": 1.8955223880597014,
+    "acc_per_pos": [
+     0.8955223880597015
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1721,
+   "output_tokens": 128,
+   "ttft_s": 0.28666269200039096,
+   "e2e_s": 1.9695835439997609,
+   "decode_s": 1.682834332001221,
+   "tpot_s": 0.013250664031505677,
+   "n_chunks": 68,
+   "itl_median_s": 0.02485977600008482,
+   "text": "In the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the g",
+   "workload_id": "bab_2k_qa2_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "2k",
+   "qa_split": "qa2",
+   "target": "garden",
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9104477611940298,
+    "mean_acceptance_length": 1.9104477611940298,
+    "acc_per_pos": [
+     0.9104477611940298
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1694,
+   "output_tokens": 128,
+   "ttft_s": 0.26843385900428984,
+   "e2e_s": 1.9020559769996908,
+   "decode_s": 1.6335351279994939,
+   "tpot_s": 0.01286248132283066,
+   "n_chunks": 66,
+   "itl_median_s": 0.0249314249958843,
+   "text": "The office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the offi",
+   "workload_id": "bab_2k_qa3_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "2k",
+   "qa_split": "qa3",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9538461538461539,
+    "mean_acceptance_length": 1.953846153846154,
+    "acc_per_pos": [
+     0.9538461538461539
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1626,
+   "output_tokens": 128,
+   "ttft_s": 0.2714057910052361,
+   "e2e_s": 1.9044888880016515,
+   "decode_s": 1.6329624179998063,
+   "tpot_s": 0.012857971795274066,
+   "n_chunks": 66,
+   "itl_median_s": 0.024840555000992026,
+   "text": "the bathroomof the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the bathroom)of the bathroom (or the b",
+   "workload_id": "bab_2k_qa3_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "2k",
+   "qa_split": "qa3",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9538461538461539,
+    "mean_acceptance_length": 1.953846153846154,
+    "acc_per_pos": [
+     0.9538461538461539
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3680,
+   "output_tokens": 128,
+   "ttft_s": 0.6343942469975445,
+   "e2e_s": 2.3453851399972336,
+   "decode_s": 1.7108966930027236,
+   "tpot_s": 0.013471627503958453,
+   "n_chunks": 66,
+   "itl_median_s": 0.025939478000509553,
+   "text": "the bathroomof\nthought\nthe bathroomofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofofof",
+   "workload_id": "bab_4k_qa1_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "4k",
+   "qa_split": "qa1",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9393939393939394,
+    "mean_acceptance_length": 1.9393939393939394,
+    "acc_per_pos": [
+     0.9393939393939394
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3303,
+   "output_tokens": 128,
+   "ttft_s": 0.5027614850041573,
+   "e2e_s": 2.1725907280051615,
+   "decode_s": 1.6697324039996602,
+   "tpot_s": 0.013147499244091813,
+   "n_chunks": 65,
+   "itl_median_s": 0.025819529000727925,
+   "text": "the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitchenof the kitc",
+   "workload_id": "bab_4k_qa1_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "4k",
+   "qa_split": "qa1",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 64.0,
+    "num_draft_tokens": 64.0,
+    "num_accepted": 63.0,
+    "acceptance_rate": 0.984375,
+    "mean_acceptance_length": 1.984375,
+    "acc_per_pos": [
+     0.984375
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3461,
+   "output_tokens": 128,
+   "ttft_s": 0.548794515998452,
+   "e2e_s": 2.530664738995256,
+   "decode_s": 1.9817681130007259,
+   "tpot_s": 0.015604473330714377,
+   "n_chunks": 77,
+   "itl_median_s": 0.025862629001494497,
+   "text": "In the garden.of the garden. (or simply: In the garden)**Note:** The text states \"Daniel took the football there\" referring to the garden, and later \"Daniel grabbed the football there\" referring to the garden.**Final Answer:** In the garden.**Corrected Answer:** In the garden.**Final Answer:** In the garden.**Final Answer:** In the garden.**Final Answer:** In the garden.**Final Answer:** In the ga",
+   "workload_id": "bab_4k_qa2_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "4k",
+   "qa_split": "qa2",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 76.0,
+    "num_draft_tokens": 76.0,
+    "num_accepted": 52.0,
+    "acceptance_rate": 0.6842105263157895,
+    "mean_acceptance_length": 1.6842105263157894,
+    "acc_per_pos": [
+     0.6842105263157895
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3071,
+   "output_tokens": 128,
+   "ttft_s": 0.4770932350002113,
+   "e2e_s": 2.3386263540014625,
+   "decode_s": 1.861421319998044,
+   "tpot_s": 0.014656860787386174,
+   "n_chunks": 73,
+   "itl_median_s": 0.02557641000021249,
+   "text": "The bathroom.of the bathroom. (Wait, let me re-read: Mary grabbed the milk, then Mary dropped the milk, then Sandra got the milk, then Sandra put down the milk, then Mary went back to the bathroom. The text does not explicitly state where the milk was put down, but the last person to handle it was Sandra, and the last location mentioned for Mary was the bathroom).\n\nActually, looking at the sequenc",
+   "workload_id": "bab_4k_qa2_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "4k",
+   "qa_split": "qa2",
+   "target": "garden",
+   "spec": {
+    "num_drafts": 72.0,
+    "num_draft_tokens": 72.0,
+    "num_accepted": 55.0,
+    "acceptance_rate": 0.7638888888888888,
+    "mean_acceptance_length": 1.7638888888888888,
+    "acc_per_pos": [
+     0.7638888888888888
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3624,
+   "output_tokens": 128,
+   "ttft_s": 0.5612154279951937,
+   "e2e_s": 2.468283383997914,
+   "decode_s": 1.9069688270028564,
+   "tpot_s": 0.01501550257482564,
+   "n_chunks": 74,
+   "itl_median_s": 0.02591808800207218,
+   "text": "the officeof the office (or simply \"the office\")**Correction based on text sequence:**\nThe football was in the office (Sandra got it there, then discarded it, then Mary got it and took it to the kitchen, then Mary journeyed to the garden).\n\n**Short phrase:** The kitchen.**Wait, let me re-read the sequence:**\n1. John got the football.\n2. John put down the football.\n3. John took the football.\n4. Joh",
+   "workload_id": "bab_4k_qa3_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "4k",
+   "qa_split": "qa3",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 73.0,
+    "num_draft_tokens": 73.0,
+    "num_accepted": 54.0,
+    "acceptance_rate": 0.7397260273972602,
+    "mean_acceptance_length": 1.7397260273972601,
+    "acc_per_pos": [
+     0.7397260273972602
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3677,
+   "output_tokens": 128,
+   "ttft_s": 0.5713695579979685,
+   "e2e_s": 2.2803820830013137,
+   "decode_s": 1.7089298860009876,
+   "tpot_s": 0.013456140834653445,
+   "n_chunks": 66,
+   "itl_median_s": 0.025963928004784975,
+   "text": "the gardenof the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden",
+   "workload_id": "bab_4k_qa3_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "4k",
+   "qa_split": "qa3",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9538461538461539,
+    "mean_acceptance_length": 1.953846153846154,
+    "acc_per_pos": [
+     0.9538461538461539
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 7251,
+   "output_tokens": 128,
+   "ttft_s": 1.172601082995243,
+   "e2e_s": 3.0287203829939244,
+   "decode_s": 1.8560203810047824,
+   "tpot_s": 0.014614333708699074,
+   "n_chunks": 66,
+   "itl_median_s": 0.02826140399702126,
+   "text": "the bathroomof the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom\")of the house (or simply \"the bathroom",
+   "workload_id": "bab_8k_qa1_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "8k",
+   "qa_split": "qa1",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9538461538461539,
+    "mean_acceptance_length": 1.953846153846154,
+    "acc_per_pos": [
+     0.9538461538461539
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 7445,
+   "output_tokens": 128,
+   "ttft_s": 1.1846832750015892,
+   "e2e_s": 3.047394121000252,
+   "decode_s": 1.8626034469998558,
+   "tpot_s": 0.014666168874014613,
+   "n_chunks": 66,
+   "itl_median_s": 0.02836838499933947,
+   "text": "the kitchenof the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (or the kitchen)of the kitchen (o",
+   "workload_id": "bab_8k_qa1_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "8k",
+   "qa_split": "qa1",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 63.0,
+    "acceptance_rate": 0.9692307692307692,
+    "mean_acceptance_length": 1.9692307692307693,
+    "acc_per_pos": [
+     0.9692307692307692
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 7455,
+   "output_tokens": 128,
+   "ttft_s": 1.1772674690000713,
+   "e2e_s": 3.0687107530029607,
+   "decode_s": 1.8913423940030043,
+   "tpot_s": 0.014892459795299247,
+   "n_chunks": 67,
+   "itl_median_s": 0.028389865001372527,
+   "text": "In the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the g",
+   "workload_id": "bab_8k_qa2_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "8k",
+   "qa_split": "qa2",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9393939393939394,
+    "mean_acceptance_length": 1.9393939393939394,
+    "acc_per_pos": [
+     0.9393939393939394
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 7256,
+   "output_tokens": 128,
+   "ttft_s": 1.1540462289995048,
+   "e2e_s": 3.0643419129992253,
+   "decode_s": 1.910191044997191,
+   "tpot_s": 0.015040874370056622,
+   "n_chunks": 68,
+   "itl_median_s": 0.02824305799731519,
+   "text": "In the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the garden.of the g",
+   "workload_id": "bab_8k_qa2_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "8k",
+   "qa_split": "qa2",
+   "target": "garden",
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9104477611940298,
+    "mean_acceptance_length": 1.9104477611940298,
+    "acc_per_pos": [
+     0.9104477611940298
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 7460,
+   "output_tokens": 128,
+   "ttft_s": 1.166979715002526,
+   "e2e_s": 3.0598676849986077,
+   "decode_s": 1.8927893709987984,
+   "tpot_s": 0.01490385331495117,
+   "n_chunks": 67,
+   "itl_median_s": 0.028405475000909064,
+   "text": "the officeof the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the office (or simply \"the office\")of the off",
+   "workload_id": "bab_8k_qa3_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "8k",
+   "qa_split": "qa3",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9242424242424242,
+    "mean_acceptance_length": 1.9242424242424243,
+    "acc_per_pos": [
+     0.9242424242424242
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 7030,
+   "output_tokens": 128,
+   "ttft_s": 1.0855369639975834,
+   "e2e_s": 2.95682429199951,
+   "decode_s": 1.8711719780039857,
+   "tpot_s": 0.014733637622078627,
+   "n_chunks": 67,
+   "itl_median_s": 0.028114838001783937,
+   "text": "the gardenof the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden (or the garden)of the garden",
+   "workload_id": "bab_8k_qa3_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "8k",
+   "qa_split": "qa3",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9242424242424242,
+    "mean_acceptance_length": 1.9242424242424243,
+    "acc_per_pos": [
+     0.9242424242424242
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 15148,
+   "output_tokens": 128,
+   "ttft_s": 2.600958287999674,
+   "e2e_s": 4.835469373996602,
+   "decode_s": 2.234399486995244,
+   "tpot_s": 0.017593696747994048,
+   "n_chunks": 66,
+   "itl_median_s": 0.03341604400338838,
+   "text": "In the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought",
+   "workload_id": "bab_16k_qa1_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "16k",
+   "qa_split": "qa1",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9242424242424242,
+    "mean_acceptance_length": 1.9242424242424243,
+    "acc_per_pos": [
+     0.9242424242424242
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 14228,
+   "output_tokens": 128,
+   "ttft_s": 2.418066607999208,
+   "e2e_s": 4.6396103340011905,
+   "decode_s": 2.2214439469971694,
+   "tpot_s": 0.017491684622024956,
+   "n_chunks": 67,
+   "itl_median_s": 0.03280786800314672,
+   "text": "In the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought\nIn the kitchen.of\nthought",
+   "workload_id": "bab_16k_qa1_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "16k",
+   "qa_split": "qa1",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 60.0,
+    "acceptance_rate": 0.8955223880597015,
+    "mean_acceptance_length": 1.8955223880597014,
+    "acc_per_pos": [
+     0.8955223880597015
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 15023,
+   "output_tokens": 128,
+   "ttft_s": 2.569294091001211,
+   "e2e_s": 5.0307253540013335,
+   "decode_s": 2.4613244840002153,
+   "tpot_s": 0.019380507748033193,
+   "n_chunks": 74,
+   "itl_median_s": 0.03335394500027178,
+   "text": "In the garden.of the garden. (Wait, looking closer at the text: \"Daniel took the football there\" refers to the Portico della gloria of the church of Santiago da Compostella, but the prompt asks for a short phrase based on the narrative insertions. \"Daniel took the football there\" follows the description of the Santiago sculpture. However, the most recent location mentioned for the football is \"Dan",
+   "workload_id": "bab_16k_qa2_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "16k",
+   "qa_split": "qa2",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 73.0,
+    "num_draft_tokens": 73.0,
+    "num_accepted": 54.0,
+    "acceptance_rate": 0.7397260273972602,
+    "mean_acceptance_length": 1.7397260273972601,
+    "acc_per_pos": [
+     0.7397260273972602
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 15401,
+   "output_tokens": 128,
+   "ttft_s": 2.654076029000862,
+   "e2e_s": 4.9329235249970225,
+   "decode_s": 2.2787377159984317,
+   "tpot_s": 0.017942816661404973,
+   "n_chunks": 67,
+   "itl_median_s": 0.033600350994674955,
+   "text": "In the garden, the kitchen, and the bathroom.of\nthought\nIn the garden, the kitchen, and the bathroom.of\nthought\nIn the garden, the kitchen, and the bathroom.of\nthought\nIn the garden, the kitchen, and the bathroom.of\nthought\nIn the garden, the kitchen, and the bathroom.of\nthought\nIn the garden, the kitchen, and the bathroom.of\nthought\nIn the garden, the kitchen, and the bathroom.of\nthought\nIn the g",
+   "workload_id": "bab_16k_qa2_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "16k",
+   "qa_split": "qa2",
+   "target": "garden",
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9104477611940298,
+    "mean_acceptance_length": 1.9104477611940298,
+    "acc_per_pos": [
+     0.9104477611940298
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 15420,
+   "output_tokens": 128,
+   "ttft_s": 2.6655333429953316,
+   "e2e_s": 4.879556009997032,
+   "decode_s": 2.213922178001667,
+   "tpot_s": 0.017432458094501314,
+   "n_chunks": 66,
+   "itl_median_s": 0.03360868200252298,
+   "text": "The office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the offi",
+   "workload_id": "bab_16k_qa3_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "16k",
+   "qa_split": "qa3",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9538461538461539,
+    "mean_acceptance_length": 1.953846153846154,
+    "acc_per_pos": [
+     0.9538461538461539
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 13726,
+   "output_tokens": 128,
+   "ttft_s": 2.3413001090011676,
+   "e2e_s": 4.47511592599767,
+   "decode_s": 2.1337064179970184,
+   "tpot_s": 0.0168008379369844,
+   "n_chunks": 66,
+   "itl_median_s": 0.03249162899737712,
+   "text": "the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the gardenof the garden",
+   "workload_id": "bab_16k_qa3_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "16k",
+   "qa_split": "qa3",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9538461538461539,
+    "mean_acceptance_length": 1.953846153846154,
+    "acc_per_pos": [
+     0.9538461538461539
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 31291,
+   "output_tokens": 128,
+   "ttft_s": 6.188791783002671,
+   "e2e_s": 9.13726993399905,
+   "decode_s": 2.9483757720008725,
+   "tpot_s": 0.02321555725984939,
+   "n_chunks": 66,
+   "itl_median_s": 0.04399814900534693,
+   "text": "In the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought\nIn the bathroom.of\nthought",
+   "workload_id": "bab_32k_qa1_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "32k",
+   "qa_split": "qa1",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.9242424242424242,
+    "mean_acceptance_length": 1.9242424242424243,
+    "acc_per_pos": [
+     0.9242424242424242
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 30623,
+   "output_tokens": 128,
+   "ttft_s": 6.046710982998775,
+   "e2e_s": 9.047735241001647,
+   "decode_s": 3.000920299004065,
+   "tpot_s": 0.02362929369294539,
+   "n_chunks": 69,
+   "itl_median_s": 0.04353569399972912,
+   "text": "In the kitchen.of the house. (Note: The text contains contradictory statements, placing her in the kitchen, hallway, and bathroom at different points). Based on the final mention, she is in the kitchen.of the house. (Note: The text contains contradictory statements, placing her in the kitchen, hallway, and bathroom at different points). Based on the final mention, she is in the kitchen.of the hous",
+   "workload_id": "bab_32k_qa1_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "32k",
+   "qa_split": "qa1",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 68.0,
+    "num_draft_tokens": 68.0,
+    "num_accepted": 60.0,
+    "acceptance_rate": 0.8823529411764706,
+    "mean_acceptance_length": 1.8823529411764706,
+    "acc_per_pos": [
+     0.8823529411764706
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 31618,
+   "output_tokens": 128,
+   "ttft_s": 6.2925646570001845,
+   "e2e_s": 9.390540480999334,
+   "decode_s": 3.0978514550006366,
+   "tpot_s": 0.024392531141737298,
+   "n_chunks": 67,
+   "itl_median_s": 0.04422800799511606,
+   "text": "Not mentioned in the document. (The text contains several nonsensical insertions like \"Daniel journeyed to the garden\" or \"Sandra grabbed the milk there,\" but the football is never located.)of\n\nthought\nNot mentioned in the document.of\nthought\nNot mentioned in the document.of\nthought\nNot mentioned in the document.of\nthought\nNot mentioned in the document.of\nthought\nNot mentioned in the document.of\nt",
+   "workload_id": "bab_32k_qa2_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "32k",
+   "qa_split": "qa2",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 58.0,
+    "acceptance_rate": 0.8405797101449275,
+    "mean_acceptance_length": 1.8405797101449275,
+    "acc_per_pos": [
+     0.8405797101449275
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 30797,
+   "output_tokens": 128,
+   "ttft_s": 6.10347396099678,
+   "e2e_s": 9.159786477001035,
+   "decode_s": 3.056208267000329,
+   "tpot_s": 0.02406463202362464,
+   "n_chunks": 70,
+   "itl_median_s": 0.04367437299515586,
+   "text": "In the garden.of the bathroom. (The text contains contradictory statements: \"Mary grabbed the milk there\" [referring to the bathroom] and \"Sandra put down the milk\" [referring to the garden]). Based on the final mention, it is in the garden.of the bathroom. (The text contains contradictory statements: \"Mary grabbed the milk there\" [referring to the bathroom] and \"Sandra put down the milk\" [referri",
+   "workload_id": "bab_32k_qa2_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "32k",
+   "qa_split": "qa2",
+   "target": "garden",
+   "spec": {
+    "num_drafts": 69.0,
+    "num_draft_tokens": 69.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.855072463768116,
+    "mean_acceptance_length": 1.855072463768116,
+    "acc_per_pos": [
+     0.855072463768116
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 29527,
+   "output_tokens": 128,
+   "ttft_s": 5.7870440449987655,
+   "e2e_s": 8.602144502998271,
+   "decode_s": 2.814995407999959,
+   "tpot_s": 0.022165318173228022,
+   "n_chunks": 66,
+   "itl_median_s": 0.04287132599711185,
+   "text": "In the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the office.of the o",
+   "workload_id": "bab_32k_qa3_0",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "32k",
+   "qa_split": "qa3",
+   "target": "kitchen",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 63.0,
+    "acceptance_rate": 0.9692307692307692,
+    "mean_acceptance_length": 1.9692307692307693,
+    "acc_per_pos": [
+     0.9692307692307692
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 30886,
+   "output_tokens": 128,
+   "ttft_s": 6.132595650997246,
+   "e2e_s": 9.022036763999495,
+   "decode_s": 2.8893390329976683,
+   "tpot_s": 0.022750701047225735,
+   "n_chunks": 66,
+   "itl_median_s": 0.04376173800119432,
+   "text": "The bathroom.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitchen.of the kitch",
+   "workload_id": "bab_32k_qa3_1",
+   "kind": "babilong",
+   "repeat": 0,
+   "force_len": true,
+   "genre": null,
+   "length_config": "32k",
+   "qa_split": "qa3",
+   "target": "bathroom",
+   "spec": {
+    "num_drafts": 65.0,
+    "num_draft_tokens": 65.0,
+    "num_accepted": 62.0,
+    "acceptance_rate": 0.9538461538461539,
+    "mean_acceptance_length": 1.953846153846154,
+    "acc_per_pos": [
+     0.9538461538461539
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1500,
+   "output_tokens": 510,
+   "ttft_s": 0.2784286979949684,
+   "e2e_s": 7.262466719999793,
+   "decode_s": 6.983949352004856,
+   "tpot_s": 0.013720922106099914,
+   "n_chunks": 280,
+   "itl_median_s": 0.025101334998907987,
+   "text": "```diff\n--- a/django/core/files/storage.py\n+++ b/django/core/files/storage.py\n@@ -33,7 +33,7 @@\n     def _save(self, name, content):\n         if self.exists(name):\n             if not self.get_save_as_function():\n-                raise FileExistsError(\"A file named %s already exists\" % name)\n+                raise FileExistsError(f\"A file named {name} already exists\")\n \n         if content_file :=",
+   "workload_id": "swe_django__django-10914",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "django",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 279.0,
+    "num_draft_tokens": 279.0,
+    "num_accepted": 230.0,
+    "acceptance_rate": 0.8243727598566308,
+    "mean_acceptance_length": 1.8243727598566308,
+    "acc_per_pos": [
+     0.8243727598566308
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1776,
+   "output_tokens": 313,
+   "ttft_s": 0.31319921799877193,
+   "e2e_s": 4.508739466997213,
+   "decode_s": 4.170182795001892,
+   "tpot_s": 0.013365970496800937,
+   "n_chunks": 167,
+   "itl_median_s": 0.025150934998237062,
+   "text": "```diff\n--- a/django/forms/fields.py\n+++ b/django/forms/fields.py\n@@ -1102,6 +1102,8 @@\n     def __init__(self, *args, **kwargs):\n         super().__init__(*args, **kwargs)\n         if self.path is None:\n+            if callable(self.path):\n+                self.path = self.path()\n             raise ImproperlyConfigured(\n                 \"FilePathField requires a 'path' argument.\"\n             )\n`",
+   "workload_id": "swe_django__django-10924",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "django",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 167.0,
+    "num_draft_tokens": 167.0,
+    "num_accepted": 146.0,
+    "acceptance_rate": 0.874251497005988,
+    "mean_acceptance_length": 1.874251497005988,
+    "acc_per_pos": [
+     0.874251497005988
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1047,
+   "output_tokens": 140,
+   "ttft_s": 0.20564392700180179,
+   "e2e_s": 2.0724522110031103,
+   "decode_s": 1.866697784003918,
+   "tpot_s": 0.013429480460459843,
+   "n_chunks": 77,
+   "itl_median_s": 0.024742124005570076,
+   "text": "```diff\n--- a/django/db/sql_compiler.py\n+++ b/django/db/sql_compiler.py\n@@ -114,7 +114,7 @@\n         if self.ordering_parts.search(sql):\n-            without_ordering = self.ordering_parts.search(sql).group(1)\n+            without_ordering = self.ordering_parts.search(' '.join(sql.splitlines())).group(1)\n             for part in sql[len(without_ordering):].split(','):\n                 part = part.",
+   "workload_id": "swe_django__django-11001",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "django",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 76.0,
+    "num_draft_tokens": 76.0,
+    "num_accepted": 63.0,
+    "acceptance_rate": 0.8289473684210527,
+    "mean_acceptance_length": 1.8289473684210527,
+    "acc_per_pos": [
+     0.8289473684210527
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 320,
+   "output_tokens": 234,
+   "ttft_s": 0.07394930299778935,
+   "e2e_s": 3.158101123000961,
+   "decode_s": 3.060111090002465,
+   "tpot_s": 0.013133523991426888,
+   "n_chunks": 131,
+   "itl_median_s": 0.023493613000027835,
+   "text": "```diff\n--- sympy/printing/ccode.py\n+++ sympy/printing/ccode.py\n@@ -1,4 +1,5 @@\n from sympy.printing.pycode import PyCode\n+from sympy.functions.special import sinc\n from sympy.printing.cutils import CCodePrinter\n \n class CCode(CCodePrinter):\n@@ -111,6 +112,9 @@\n     def _print_sinc(self, expr):\n         # sinc(x) = sin(pi*x)/(pi*x)\n         # We use the Piecewise definition to avoid division by ze",
+   "workload_id": "swe_sympy__sympy-11400",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "sympy",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 131.0,
+    "num_draft_tokens": 131.0,
+    "num_accepted": 103.0,
+    "acceptance_rate": 0.7862595419847328,
+    "mean_acceptance_length": 1.786259541984733,
+    "acc_per_pos": [
+     0.7862595419847328
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 541,
+   "output_tokens": 105,
+   "ttft_s": 0.1202590600005351,
+   "e2e_s": 1.4156874590044026,
+   "decode_s": 1.2713779690020601,
+   "tpot_s": 0.012224788163481347,
+   "n_chunks": 55,
+   "itl_median_s": 0.023743441997794434,
+   "text": "```diff\n--- sympy/sympy/simplify/trig.py\n+++ sympy/sympy/simplify/trig.py\n@@ -114,6 +114,7 @@\n     # This is a bit of a hack, but it works for most cases\n     expr = expr.rewrite(sin)\n     expr = expr.rewrite(cos)\n+    expr = expr.rewrite(exp)\n     expr = trigsimp(expr)\n     return expr\n```",
+   "workload_id": "swe_sympy__sympy-11870",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "sympy",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 55.0,
+    "num_draft_tokens": 55.0,
+    "num_accepted": 50.0,
+    "acceptance_rate": 0.9090909090909091,
+    "mean_acceptance_length": 1.9090909090909092,
+    "acc_per_pos": [
+     0.9090909090909091
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1126,
+   "output_tokens": 141,
+   "ttft_s": 0.18875977100105956,
+   "e2e_s": 2.07817822600191,
+   "decode_s": 1.8893300460040336,
+   "tpot_s": 0.013495214614314526,
+   "n_chunks": 77,
+   "itl_median_s": 0.02472206600214122,
+   "text": "```diff\n--- sympy/printing/latex.py\n+++ sympy/printing/latex.py\n@@ -331,6 +331,10 @@\n         if self._print_Mul_is_fraction(expr):\n             return self._print_fraction(expr)\n \n+        if expr.is_commutative and expr.args[0].is_Number:\n+            if not expr.args[0].is_One:\n+                return self._print_fraction(expr)\n+\n         return self._print_Mul(expr)\n \n     def _print_fraction(",
+   "workload_id": "swe_sympy__sympy-11897",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "sympy",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 76.0,
+    "num_draft_tokens": 76.0,
+    "num_accepted": 64.0,
+    "acceptance_rate": 0.8421052631578947,
+    "mean_acceptance_length": 1.8421052631578947,
+    "acc_per_pos": [
+     0.8421052631578947
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 764,
+   "output_tokens": 59,
+   "ttft_s": 0.1388708040030906,
+   "e2e_s": 0.8925423710024916,
+   "decode_s": 0.7535776179938694,
+   "tpot_s": 0.012992717551618438,
+   "n_chunks": 32,
+   "itl_median_s": 0.02410134000092512,
+   "text": "```diff\n--- a/lib/matplotlib/__init__.py\n+++ b/lib/matplotlib/__init__.py\n@@ -11,3 +11,4 @@\n \n __version__ = VERSION\n+__version_info__ = VERSION_INFO\n```",
+   "workload_id": "swe_matplotlib__matplotlib-18869",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "matplotlib",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 31.0,
+    "num_draft_tokens": 31.0,
+    "num_accepted": 27.0,
+    "acceptance_rate": 0.8709677419354839,
+    "mean_acceptance_length": 1.870967741935484,
+    "acc_per_pos": [
+     0.8709677419354839
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3832,
+   "output_tokens": 182,
+   "ttft_s": 0.612438858996029,
+   "e2e_s": 3.1384435539948754,
+   "decode_s": 2.5257933259999845,
+   "tpot_s": 0.013954659259668423,
+   "n_chunks": 97,
+   "itl_median_s": 0.026154608000069857,
+   "text": "```diff\n--- a/lib/matplotlib/widgets.py\n+++ b/lib/matplotlib/widgets.py\n@@ -775,6 +775,9 @@\n         self.valtext = self.ax.text(1, .5, self._format(valinit),\n                                     transform=self.ax.transAxes,\n                                     verticalalignment='center')\n+        if np.all(np.diff(valinit) == 0):\n+            # Ensure the polygon has 5 vertices even if valinit[0]",
+   "workload_id": "swe_matplotlib__matplotlib-22711",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "matplotlib",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 96.0,
+    "num_draft_tokens": 96.0,
+    "num_accepted": 85.0,
+    "acceptance_rate": 0.8854166666666666,
+    "mean_acceptance_length": 1.8854166666666665,
+    "acc_per_pos": [
+     0.8854166666666666
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3657,
+   "output_tokens": 283,
+   "ttft_s": 0.5949488609985565,
+   "e2e_s": 4.467783611995401,
+   "decode_s": 3.872744560998399,
+   "tpot_s": 0.013733136741129073,
+   "n_chunks": 149,
+   "itl_median_s": 0.02600128799531376,
+   "text": "```diff\n--- a/lib/matplotlib/artist.py\n+++ b/lib/matplotlib/artist.py\n@@ -1278,11 +1278,14 @@\n     normed = self.norm(data)\n     n = self.cmap.N\n \n-    # Midpoints of neighboring color intervals.\n-    neighbors = self.norm.inverse(\n-        (int(normed * n) + np.array([0, 1])) / n)\n-    if np.all(np.isfinite(neighbors)):\n-        g_sig_digits = np.max([np.log10(np.abs(neighbors - data)).astype(int",
+   "workload_id": "swe_matplotlib__matplotlib-22835",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "matplotlib",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 148.0,
+    "num_draft_tokens": 148.0,
+    "num_accepted": 134.0,
+    "acceptance_rate": 0.9054054054054054,
+    "mean_acceptance_length": 1.9054054054054053,
+    "acc_per_pos": [
+     0.9054054054054054
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 714,
+   "output_tokens": 512,
+   "ttft_s": 0.12764669599710032,
+   "e2e_s": 6.987571836994903,
+   "decode_s": 6.859823441001936,
+   "tpot_s": 0.013424312017616314,
+   "n_chunks": 281,
+   "itl_median_s": 0.024528554000426084,
+   "text": "```diff\n--- a/sklearn/linear_model/_base.py\n+++ b/sklearn/linear_model/_base.py\n@@ -114,7 +114,8 @@\n     def __init__(self, alphas=None, cv=None, scoring=None,\n                  store_cv_values=False, normalize=False):\n         self.alphas = alphas\n         self.cv = cv\n         self.scoring = scoring\n         self.store_cv_values = store_cv_values\n         self.normalize = normalize\n--- a/sklearn",
+   "workload_id": "swe_scikit-learn__scikit-learn-10297",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "scikit-learn",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 280.0,
+    "num_draft_tokens": 280.0,
+    "num_accepted": 231.0,
+    "acceptance_rate": 0.825,
+    "mean_acceptance_length": 1.825,
+    "acc_per_pos": [
+     0.825
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 828,
+   "output_tokens": 127,
+   "ttft_s": 0.1646840670000529,
+   "e2e_s": 1.781395899997733,
+   "decode_s": 1.6166269029999967,
+   "tpot_s": 0.012830372246031719,
+   "n_chunks": 68,
+   "itl_median_s": 0.024289098000735976,
+   "text": "```diff\n--- a/sklearn/preprocessing/label.py\n+++ b/sklearn/preprocessing/label.py\n@@ -131,4 +131,6 @@\n         if self.classes_ is None:\n             raise NotFittedError(\"This LabelEncoder instance is not fitted yet.\")\n-        return np.searchsorted(self.classes_, y)\n+        if len(y) == 0:\n+            return np.array([], dtype=np.int64)\n+        return np.searchsorted(self.classes_, y)\n```",
+   "workload_id": "swe_scikit-learn__scikit-learn-10508",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "scikit-learn",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 67.0,
+    "num_draft_tokens": 67.0,
+    "num_accepted": 59.0,
+    "acceptance_rate": 0.8805970149253731,
+    "mean_acceptance_length": 1.8805970149253732,
+    "acc_per_pos": [
+     0.8805970149253731
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 677,
+   "output_tokens": 123,
+   "ttft_s": 0.1243338339991169,
+   "e2e_s": 1.716989526998077,
+   "decode_s": 1.5683136849984294,
+   "tpot_s": 0.012855030204905159,
+   "n_chunks": 66,
+   "itl_median_s": 0.02401171999372309,
+   "text": "```diff\n--- a/sklearn/utils/validation.py\n+++ b/sklearn/utils/validation.py\n@@ -141,6 +141,8 @@\n         if not isinstance(X, np.ndarray):\n             X = np.asarray(X)\n \n+        if hasattr(X, \"values\"):\n+            X = X.values\n+\n         if warn_on_dtype and X.dtype == object:\n             warnings.warn(\n                 \"Data with input dtype object was converted to float64.\",\n```",
+   "workload_id": "swe_scikit-learn__scikit-learn-10949",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "scikit-learn",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 66.0,
+    "num_draft_tokens": 66.0,
+    "num_accepted": 57.0,
+    "acceptance_rate": 0.8636363636363636,
+    "mean_acceptance_length": 1.8636363636363638,
+    "acc_per_pos": [
+     0.8636363636363636
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 3077,
+   "output_tokens": 93,
+   "ttft_s": 0.4959729519978282,
+   "e2e_s": 1.7439653889960027,
+   "decode_s": 1.2222957069971017,
+   "tpot_s": 0.013285822902142409,
+   "n_chunks": 48,
+   "itl_median_s": 0.0255941210052697,
+   "text": "```diff\n--- a/_pytest/assertion/rewrite.py\n+++ b/_pytest/assertion/rewrite.py\n@@ -757,7 +757,7 @@\n     if doc is None:\n         return False\n \n-    return \"PYTEST_DONT_REWRITE\" in docstring\n+    return isinstance(doc, str) and \"PYTEST_DONT_REWRITE\" in doc\n```",
+   "workload_id": "swe_pytest-dev__pytest-11143",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "pytest-dev",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 48.0,
+    "num_draft_tokens": 48.0,
+    "num_accepted": 45.0,
+    "acceptance_rate": 0.9375,
+    "mean_acceptance_length": 1.9375,
+    "acc_per_pos": [
+     0.9375
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1163,
+   "output_tokens": 138,
+   "ttft_s": 0.21180756299872883,
+   "e2e_s": 2.0806011719978414,
+   "decode_s": 1.8687064789992291,
+   "tpot_s": 0.013640193277366637,
+   "n_chunks": 77,
+   "itl_median_s": 0.024783105996903032,
+   "text": "```diff\n--- a/pytest/importer.py\n+++ b/pytest/importer.py\n@@ -111,6 +111,9 @@\n             # we can't use the importlib.import_module because it doesn't\n             # support the 'package' argument we need for relative imports\n             # and it doesn't allow us to specify the loader.\n+            if name in sys.modules:\n+                return sys.modules[name]\n+\n             module = importl",
+   "workload_id": "swe_pytest-dev__pytest-11148",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "pytest-dev",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 76.0,
+    "num_draft_tokens": 76.0,
+    "num_accepted": 61.0,
+    "acceptance_rate": 0.8026315789473685,
+    "mean_acceptance_length": 1.8026315789473686,
+    "acc_per_pos": [
+     0.8026315789473685
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 928,
+   "output_tokens": 512,
+   "ttft_s": 0.18056385500676697,
+   "e2e_s": 7.006892052006151,
+   "decode_s": 6.8262401379979565,
+   "tpot_s": 0.013358591268097762,
+   "n_chunks": 278,
+   "itl_median_s": 0.024686967000889126,
+   "text": "```diff\n--- a/pytest/_astrewriter.py\n+++ b/pytest/_astrewriter.py\n@@ -111,6 +111,15 @@\n         if (\n             isinstance(node, ast.Call)\n             and isinstance(node.func, ast.Name)\n-            and node.func.id in (\"all\", \"any\")\n+            and node.func.id in (\"all\", \"any\")\n+            and len(node.args) == 1\n+            and isinstance(node.args[0], (ast.ListComp, ast.GeneratorExp))\n ",
+   "workload_id": "swe_pytest-dev__pytest-5103",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "pytest-dev",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 277.0,
+    "num_draft_tokens": 277.0,
+    "num_accepted": 234.0,
+    "acceptance_rate": 0.8447653429602888,
+    "mean_acceptance_length": 1.8447653429602888,
+    "acc_per_pos": [
+     0.8447653429602888
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 530,
+   "output_tokens": 211,
+   "ttft_s": 0.10043599100026768,
+   "e2e_s": 2.84714618200087,
+   "decode_s": 2.7466133210036787,
+   "tpot_s": 0.01307911105239847,
+   "n_chunks": 116,
+   "itl_median_s": 0.02383746199484449,
+   "text": "```diff\n--- a/sphinx/ext/autodoc/documenter.py\n+++ b/sphinx/ext/autodoc/documenter.py\n@@ -1011,7 +1011,11 @@\n         # inherited-members: if given, document members inherited from base classes.\n         # If a list of classes is given, only document members from those classes.\n         inherited_members = self.options.get('inherited-members')\n-        if inherited_members:\n+        if inherited_m",
+   "workload_id": "swe_sphinx-doc__sphinx-10325",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "sphinx-doc",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 115.0,
+    "num_draft_tokens": 115.0,
+    "num_accepted": 95.0,
+    "acceptance_rate": 0.8260869565217391,
+    "mean_acceptance_length": 1.8260869565217392,
+    "acc_per_pos": [
+     0.8260869565217391
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1417,
+   "output_tokens": 158,
+   "ttft_s": 0.25986848800675943,
+   "e2e_s": 2.4118874040068476,
+   "decode_s": 2.1519342760002473,
+   "tpot_s": 0.013706587745224505,
+   "n_chunks": 88,
+   "itl_median_s": 0.024788695998722687,
+   "text": "```diff\n--- a/sphinx/ext/autodoc/typehints.py\n+++ b/sphinx/ext/autodoc/typehints.py\n@@ -155,6 +155,10 @@\n         if name.startswith('*'):\n             # This is a *args or **kwargs parameter\n             # We should check if it's already in the docstring\n+            # by looking for the name without the stars.\n+            if name.lstrip('*') in processed_params:\n+                continue\n+\n    ",
+   "workload_id": "swe_sphinx-doc__sphinx-10451",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "sphinx-doc",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 87.0,
+    "num_draft_tokens": 87.0,
+    "num_accepted": 70.0,
+    "acceptance_rate": 0.8045977011494253,
+    "mean_acceptance_length": 1.8045977011494254,
+    "acc_per_pos": [
+     0.8045977011494253
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 902,
+   "output_tokens": 104,
+   "ttft_s": 0.16911443600110942,
+   "e2e_s": 1.5228980269966996,
+   "decode_s": 1.3292846939948504,
+   "tpot_s": 0.012905676640726702,
+   "n_chunks": 56,
+   "itl_median_s": 0.024327777995495126,
+   "text": "```diff\n--- a/sphinx/util/rst.py\n+++ b/sphinx/util/rst.py\n@@ -88,7 +88,7 @@\n     if prolog:\n         # we prepend the prolog to the source\n         # we add a newline to ensure that the prolog is separated from the source\n-        source = prolog + '\\n' + source\n+        source = prolog + '\\n\\n' + source\n \n     return source\n```",
+   "workload_id": "swe_sphinx-doc__sphinx-11445",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "sphinx-doc",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 56.0,
+    "num_draft_tokens": 56.0,
+    "num_accepted": 48.0,
+    "acceptance_rate": 0.8571428571428571,
+    "mean_acceptance_length": 1.8571428571428572,
+    "acc_per_pos": [
+     0.8571428571428571
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 474,
+   "output_tokens": 512,
+   "ttft_s": 0.09131781799806049,
+   "e2e_s": 6.605629411998962,
+   "decode_s": 6.514227125000616,
+   "tpot_s": 0.012747998287672438,
+   "n_chunks": 272,
+   "itl_median_s": 0.024029660002270248,
+   "text": "```diff\n--- a/astropy/modeling/separable.py\n+++ b/astropy/modeling/separable.py\n@@ -54,6 +54,11 @@\n         if isinstance(model, CompoundModel):\n             # Recursively get the separability matrix for the sub-models\n             sub_matrices = [separability_matrix(sub) for sub in model.submodels]\n+            if len(sub_matrices) == 1:\n+                return sub_matrices[0]\n+            if all",
+   "workload_id": "swe_astropy__astropy-12907",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "astropy",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 271.0,
+    "num_draft_tokens": 271.0,
+    "num_accepted": 240.0,
+    "acceptance_rate": 0.8856088560885609,
+    "mean_acceptance_length": 1.8856088560885609,
+    "acc_per_pos": [
+     0.8856088560885609
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 737,
+   "output_tokens": 512,
+   "ttft_s": 0.13123861700296402,
+   "e2e_s": 6.960170427999401,
+   "decode_s": 6.828835590997187,
+   "tpot_s": 0.013363670432479819,
+   "n_chunks": 280,
+   "itl_median_s": 0.024530585993488785,
+   "text": "```diff\n--- a/astropy/io/ascii/core.py\n+++ b/astropy/io/ascii/core.py\n@@ -1633,7 +1633,7 @@\n     def __init__(self, *args, **kwargs):\n         super().__init__(*args, **kwargs)\n-        self.header_rows = None\n+        self.header_rows = kwargs.get('header_rows', None)\n \n     def _write_header(self, table):\n         # The RST writer does not support header_rows\n```\n\nWait, looking closer at the `RS",
+   "workload_id": "swe_astropy__astropy-14182",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "astropy",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 279.0,
+    "num_draft_tokens": 279.0,
+    "num_accepted": 232.0,
+    "acceptance_rate": 0.8315412186379928,
+    "mean_acceptance_length": 1.8315412186379927,
+    "acc_per_pos": [
+     0.8315412186379928
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 1037,
+   "output_tokens": 216,
+   "ttft_s": 0.15692292300082045,
+   "e2e_s": 2.948591733002104,
+   "decode_s": 2.766441086998384,
+   "tpot_s": 0.012867167846504112,
+   "n_chunks": 113,
+   "itl_median_s": 0.024645905999932438,
+   "text": "```diff\n--- a/astropy/io/ascii/qdp.py\n+++ b/astropy/io/ascii/qdp.py\n@@ -43,7 +43,7 @@\n     def _read_line(self, line):\n         line = line.strip()\n         if not line:\n-            return None\n+            return None\n \n-        if line.startswith(\"READ SERR\"):\n-            parts = line.split()\n+        if line.upper().startswith(\"READ SERR\"):\n+            parts = line.split()\n             self.",
+   "workload_id": "swe_astropy__astropy-14365",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "astropy",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 113.0,
+    "num_draft_tokens": 113.0,
+    "num_accepted": 103.0,
+    "acceptance_rate": 0.911504424778761,
+    "mean_acceptance_length": 1.911504424778761,
+    "acc_per_pos": [
+     0.911504424778761
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 367,
+   "output_tokens": 512,
+   "ttft_s": 0.07923863599717151,
+   "e2e_s": 6.652328447002219,
+   "decode_s": 6.572976272000233,
+   "tpot_s": 0.012862967264188322,
+   "n_chunks": 277,
+   "itl_median_s": 0.023836401000153273,
+   "text": "```diff\n--- a/sessions.py\n+++ b/sessions.py\n@@ -441,7 +441,7 @@\n \n     def resolve_redirects(self, resp, cycle):\n         # ... (existing code)\n-        req = self.prepare_request(request)\n+        req = request\n         while not self.should_redirect(req, resp, cycle):\n             break\n```\n\nWait, looking closer at the `requests` source for `Session.resolve_redirects`, the logic actually involve",
+   "workload_id": "swe_psf__requests-1963",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "psf",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 276.0,
+    "num_draft_tokens": 276.0,
+    "num_accepted": 235.0,
+    "acceptance_rate": 0.8514492753623188,
+    "mean_acceptance_length": 1.8514492753623188,
+    "acc_per_pos": [
+     0.8514492753623188
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 968,
+   "output_tokens": 156,
+   "ttft_s": 0.17229045699787093,
+   "e2e_s": 2.196194206000655,
+   "decode_s": 1.998653896000178,
+   "tpot_s": 0.012894541264517279,
+   "n_chunks": 82,
+   "itl_median_s": 0.02451091800321592,
+   "text": "```diff\n--- a/requests/models.py\n+++ b/requests/models.py\n@@ -624,7 +624,10 @@\n \n     def generate(self, chunk_size=CONTENT_CHUNK_SIZE, decode_content=True):\n         try:\n             for chunk in self.raw.stream(chunk_size, decode_content=decode_content):\n                 yield chunk\n+        except socket.error as e:\n+            raise ConnectionError(e)\n+\n     def iter_content(self, chunk_size",
+   "workload_id": "swe_psf__requests-2148",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "psf",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 82.0,
+    "num_draft_tokens": 82.0,
+    "num_accepted": 74.0,
+    "acceptance_rate": 0.9024390243902439,
+    "mean_acceptance_length": 1.9024390243902438,
+    "acc_per_pos": [
+     0.9024390243902439
+    ]
+   }
+  },
+  {
+   "prompt_tokens": 340,
+   "output_tokens": 94,
+   "ttft_s": 0.07831968399841571,
+   "e2e_s": 1.2491174090027926,
+   "decode_s": 1.1474109609989682,
+   "tpot_s": 0.01233775226880611,
+   "n_chunks": 50,
+   "itl_median_s": 0.0232669539982453,
+   "text": "```diff\n--- a/requests/sessions.py\n+++ b/requests/sessions.py\n@@ -215,7 +215,7 @@\n         if method is None:\n             method = 'GET'\n \n-        method = builtin_str(method)\n+        method = to_native_str(method)\n \n         url = request.url\n         headers = request.headers\n```",
+   "workload_id": "swe_psf__requests-2317",
+   "kind": "swe_bench_lite",
+   "repeat": 0,
+   "force_len": false,
+   "genre": "psf",
+   "length_config": null,
+   "qa_split": null,
+   "target": null,
+   "spec": {
+    "num_drafts": 50.0,
+    "num_draft_tokens": 50.0,
+    "num_accepted": 44.0,
+    "acceptance_rate": 0.88,
+    "mean_acceptance_length": 1.88,
+    "acc_per_pos": [
+     0.88
+    ]
+   }
+  }
+ ]
+}
